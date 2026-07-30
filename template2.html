@@ -1,0 +1,1036 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Modifiable - Édition Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Segoe+UI:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+
+        /* --- Éditeur --- */
+        #editor {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        #editor h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a202c;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        #editor h1 i {
+            color: #5b46f0;
+            margin-right: 10px;
+        }
+
+        #editor h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-top: 28px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #editor h2 i {
+            color: #5b46f0;
+            font-size: 1rem;
+        }
+
+        #editor label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 4px;
+        }
+
+        #editor input,
+        #editor textarea,
+        #editor select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            background: #f7fafc;
+            font-family: inherit;
+        }
+
+        #editor input:focus,
+        #editor textarea:focus,
+        #editor select:focus {
+            outline: none;
+            border-color: #5b46f0;
+            box-shadow: 0 0 0 3px rgba(91, 70, 240, 0.12);
+            background: #ffffff;
+        }
+
+        #editor textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .entry {
+            border: 1px solid #edf2f7;
+            padding: 16px;
+            margin-bottom: 14px;
+            border-radius: 14px;
+            background: #f9fafb;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .entry:hover {
+            border-color: #cbd5e0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .entry .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #fc8181;
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .entry .delete-btn:hover {
+            background: #e53e3e;
+            transform: scale(1.05);
+        }
+
+        button {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: #5b46f0;
+            color: #fff;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(91, 70, 240, 0.3);
+        }
+        button:active {
+            transform: scale(0.96);
+        }
+
+        .btn-add {
+            background: #edf2f7;
+            color: #2d3748;
+            margin-top: 2px;
+        }
+        .btn-add:hover {
+            background: #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #5b46f0, #7c3aed);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #5b46f0;
+            color: #5b46f0;
+        }
+        .btn-outline:hover {
+            background: #5b46f0;
+            color: #fff;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px 50px;
+        }
+
+        @media (max-width: 820px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            #editor {
+                padding: 20px;
+            }
+        }
+
+        /* --- Aperçu --- */
+        #preview-mode {
+            max-width: 1280px;
+            margin: 30px auto 0;
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        #cv-preview {
+            background: #fff;
+            padding: 10px 0;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        /* --- Styles du CV --- */
+        .cv-wrapper {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .cv-container {
+            display: flex;
+            min-height: 297mm;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .cv-sidebar {
+            width: 34%;
+            color: #fff;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background: #1a202c;
+        }
+
+        .cv-profile-header {
+            padding: 30px 20px 24px;
+            text-align: center;
+            background: #2d3748;
+        }
+
+        .cv-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            background: #4a5568;
+        }
+        .cv-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cv-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #4a5568;
+            color: #a0aec0;
+            font-size: 28px;
+        }
+
+        .cv-name {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .cv-subtitle {
+            font-size: 13px;
+            opacity: 0.75;
+            font-style: italic;
+            margin-top: 2px;
+        }
+
+        .cv-sidebar-content {
+            padding: 24px 20px 30px;
+            flex: 1;
+        }
+
+        .cv-sidebar-section {
+            margin-bottom: 28px;
+        }
+
+        .cv-sidebar-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 14px;
+            color: #a0c4ff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 6px;
+        }
+
+        .cv-info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11.5px;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        .cv-info-item i {
+            width: 18px;
+            color: #a0c4ff;
+            font-size: 13px;
+            text-align: center;
+        }
+        .cv-info-label {
+            font-weight: 600;
+            margin-right: 3px;
+        }
+
+        .cv-skill-item {
+            margin-bottom: 14px;
+        }
+        .cv-skill-name {
+            font-size: 11.5px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .cv-skill-desc {
+            font-size: 11px;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .cv-interest-item {
+            font-size: 11.5px;
+            line-height: 1.6;
+            padding-left: 14px;
+            position: relative;
+            margin-bottom: 4px;
+        }
+        .cv-interest-item::before {
+            content: "•";
+            color: #a0c4ff;
+            position: absolute;
+            left: 0;
+        }
+
+        .cv-main {
+            width: 66%;
+            padding: 30px 32px;
+            background: #fff;
+        }
+
+        .cv-main-section {
+            margin-bottom: 26px;
+        }
+
+        .cv-main-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #1a202c;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .cv-block {
+            margin-bottom: 18px;
+        }
+        .cv-block h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+        .cv-block .cv-sub {
+            font-size: 11.5px;
+            font-style: italic;
+            color: #718096;
+        }
+        .cv-block .cv-date {
+            font-size: 11px;
+            font-weight: 600;
+            color: #4a5568;
+            float: right;
+            margin-top: -18px;
+        }
+        .cv-block p,
+        .cv-block .cv-text {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #4a5568;
+            margin-top: 4px;
+        }
+
+        .cv-real-list {
+            padding-left: 18px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+        .cv-real-list li {
+            margin-bottom: 4px;
+        }
+
+        .cv-ref-item {
+            margin-bottom: 14px;
+        }
+        .cv-ref-name {
+            font-weight: 700;
+            color: #1a202c;
+            font-size: 13px;
+        }
+        .cv-ref-details {
+            font-size: 11.5px;
+            color: #718096;
+        }
+
+        .cv-disclaimer {
+            font-size: 9px;
+            text-align: center;
+            color: #a0aec0;
+            margin-top: 28px;
+            font-style: italic;
+            border-top: 1px solid #edf2f7;
+            padding-top: 16px;
+        }
+
+        .cv-container+.cv-container {
+            margin-top: 30px;
+            page-break-before: always;
+        }
+
+        /* Responsive preview */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+            #editor,
+            .preview-actions {
+                display: none !important;
+            }
+            #preview-mode {
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+                border-radius: 0;
+            }
+            .cv-wrapper {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            .cv-container {
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .cv-container {
+                flex-direction: column;
+            }
+            .cv-sidebar {
+                width: 100%;
+            }
+            .cv-main {
+                width: 100%;
+                padding: 20px;
+            }
+        }
+
+        /* petites touches */
+        .color-picker-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 20px;
+        }
+        .color-picker-grid label {
+            font-size: 0.8rem;
+            color: #4a5568;
+        }
+        .color-picker-grid input[type="color"] {
+            width: 100%;
+            height: 38px;
+            padding: 2px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== ÉDITEUR ===== -->
+    <div id="editor">
+        <h1><i class="fas fa-edit"></i> Éditeur de CV</h1>
+         <div class="mb-6">
+        <a href="model.html" class="btn-outline inline-flex items-center">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Retour aux modèles
+        </a>
+    </div>
+
+        <div class="flex flex-wrap gap-3 mb-6">
+            <button class="btn-primary" onclick="resetForm()"><i class="fas fa-undo mr-1"></i> Réinitialiser</button>
+            <button class="btn-success" id="preview-btn" onclick="generatePreview()"><i class="fas fa-eye mr-1"></i> Aperçu</button>
+        </div>
+
+        <form onsubmit="return false;">
+            <div class="form-grid">
+
+                <!-- Colonne gauche -->
+                <div>
+                    <h2><i class="fas fa-user"></i> Informations personnelles</h2>
+                    <div id="personal-info-container"></div>
+                    <button type="button" class="btn-add" onclick="addPersonalInfo()"><i class="fas fa-plus mr-1"></i> Ajouter un champ</button>
+
+                    <h2 class="mt-6"><i class="fas fa-camera"></i> Photo de profil</h2>
+                    <input type="file" id="photo" accept="image/*" class="mb-2" />
+
+                    <h2 class="mt-6"><i class="fas fa-address-card"></i> Profil</h2>
+                    <textarea id="profil" rows="4" placeholder="Décrivez votre parcours, vos compétences clés et vos objectifs professionnels..."></textarea>
+
+                    <h2 class="mt-6"><i class="fas fa-graduation-cap"></i> Formations</h2>
+                    <div id="formations-container"></div>
+                    <button type="button" class="btn-add" onclick="addFormation()"><i class="fas fa-plus mr-1"></i> Ajouter une formation</button>
+
+                    <h2 class="mt-6"><i class="fas fa-heart"></i> Centres d'intérêt</h2>
+                    <div id="interests-container"></div>
+                    <button type="button" class="btn-add" onclick="addInterest()"><i class="fas fa-plus mr-1"></i> Ajouter un intérêt</button>
+                </div>
+
+                <!-- Colonne droite -->
+                <div>
+                    <h2><i class="fas fa-star"></i> Qualités</h2>
+                    <div id="qualities-container"></div>
+                    <button type="button" class="btn-add" onclick="addQuality()"><i class="fas fa-plus mr-1"></i> Ajouter une qualité</button>
+
+                    <h2 class="mt-6"><i class="fas fa-trophy"></i> Réalisations</h2>
+                    <div id="realisations-container"></div>
+                    <button type="button" class="btn-add" onclick="addRealisation()"><i class="fas fa-plus mr-1"></i> Ajouter une réalisation</button>
+
+                    <h2 class="mt-6"><i class="fas fa-address-book"></i> Références</h2>
+                    <div id="references-container"></div>
+                    <button type="button" class="btn-add" onclick="addReference()"><i class="fas fa-plus mr-1"></i> Ajouter une référence</button>
+
+                    <h2 class="mt-6"><i class="fas fa-palette"></i> Personnalisation</h2>
+                    <div class="color-picker-grid">
+                        <div>
+                            <label>Fond sidebar</label>
+                            <input type="color" id="sidebar-bg" value="#1a202c" />
+                        </div>
+                        <div>
+                            <label>Fond en-tête</label>
+                            <input type="color" id="header-bg" value="#2d3748" />
+                        </div>
+                        <div>
+                            <label>Couleur titres</label>
+                            <input type="color" id="section-title-color" value="#a0c4ff" />
+                        </div>
+                        <div>
+                            <label>Police</label>
+                            <select id="font-family">
+                                <option value="Inter">Inter</option>
+                                <option value="Segoe UI">Segoe UI</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Open Sans">Open Sans</option>
+                                <option value="Lato">Lato</option>
+                                <option value="Montserrat">Montserrat</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center mt-10">
+                <button class="btn-success text-lg px-10 py-3" onclick="generatePreview()">
+                    <i class="fas fa-eye mr-2"></i> Aperçu du CV
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ===== APERÇU ===== -->
+    <div id="preview-mode" style="display: none;">
+        <div id="cv-preview"></div>
+        <div class="preview-actions">
+            <button class="btn-primary" onclick="downloadPDF()"><i class="fas fa-file-pdf mr-2"></i> Télécharger PDF</button>
+            <button class="btn-outline" onclick="goBackToEdit()"><i class="fas fa-edit mr-2"></i> Retour à l'édition</button>
+        </div>
+    </div>
+
+    <!-- ===== SCRIPT ===== -->
+    <script>
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!document.querySelector('#personal-info-container .entry')) addPersonalInfo('Nom', 'Jean Dupont');
+            if (!document.querySelector('#formations-container .entry')) addFormation('Licence en Informatique', 'Université de Paris', '2020 - 2023');
+            if (!document.querySelector('#interests-container .entry')) addInterest('Lecture, Voyages, Sports');
+            if (!document.querySelector('#qualities-container .entry')) addQuality('Autonomie', 'Capacité à travailler de manière indépendante et à prendre des initiatives.');
+            if (!document.querySelector('#realisations-container .entry')) addRealisation('Application mobile: Développement d\'une app de gestion de tâches');
+            if (!document.querySelector('#references-container .entry')) addReference('Marie Martin', 'Responsable RH, +33 7 89 01 23 45');
+
+            loadFromLocalStorage();
+            attachAutoSave();
+        });
+
+        // --- LOCAL STORAGE ---
+        function saveToLocalStorage() {
+            const data = {
+                personal: [],
+                profil: document.getElementById('profil').value,
+                formations: [],
+                interests: [],
+                qualities: [],
+                realisations: [],
+                references: [],
+                colors: {
+                    sidebar: document.getElementById('sidebar-bg').value,
+                    header: document.getElementById('header-bg').value,
+                    title: document.getElementById('section-title-color').value,
+                    font: document.getElementById('font-family').value,
+                }
+            };
+
+            document.querySelectorAll('#personal-info-container .entry').forEach(e => {
+                const label = e.querySelector('.info-label-input')?.value || '';
+                const value = e.querySelector('.info-value-input')?.value || '';
+                if (label || value) data.personal.push({ label, value });
+            });
+            document.querySelectorAll('#formations-container .entry').forEach(e => {
+                const title = e.querySelector('.form-title')?.value || '';
+                const subtitle = e.querySelector('.form-subtitle')?.value || '';
+                const date = e.querySelector('.form-date')?.value || '';
+                if (title || subtitle || date) data.formations.push({ title, subtitle, date });
+            });
+            document.querySelectorAll('#interests-container .entry').forEach(e => {
+                const val = e.querySelector('.interest-item')?.value || '';
+                if (val) data.interests.push(val);
+            });
+            document.querySelectorAll('#qualities-container .entry').forEach(e => {
+                const name = e.querySelector('.skill-name-input')?.value || '';
+                const desc = e.querySelector('.skill-desc-input')?.value || '';
+                if (name || desc) data.qualities.push({ name, desc });
+            });
+            document.querySelectorAll('#realisations-container .entry').forEach(e => {
+                const val = e.querySelector('.real-item')?.value || '';
+                if (val) data.realisations.push(val);
+            });
+            document.querySelectorAll('#references-container .entry').forEach(e => {
+                const name = e.querySelector('.ref-name')?.value || '';
+                const details = e.querySelector('.ref-details')?.value || '';
+                if (name || details) data.references.push({ name, details });
+            });
+
+            localStorage.setItem('cvData', JSON.stringify(data));
+        }
+
+        function loadFromLocalStorage() {
+            const raw = localStorage.getItem('cvData');
+            if (!raw) return;
+            try {
+                const data = JSON.parse(raw);
+                const pContainer = document.getElementById('personal-info-container');
+                pContainer.innerHTML = '';
+                data.personal.forEach(p => addPersonalInfo(p.label, p.value));
+
+                document.getElementById('profil').value = data.profil || '';
+
+                const fContainer = document.getElementById('formations-container');
+                fContainer.innerHTML = '';
+                data.formations.forEach(f => addFormation(f.title, f.subtitle, f.date));
+
+                const iContainer = document.getElementById('interests-container');
+                iContainer.innerHTML = '';
+                data.interests.forEach(i => addInterest(i));
+
+                const qContainer = document.getElementById('qualities-container');
+                qContainer.innerHTML = '';
+                data.qualities.forEach(q => addQuality(q.name, q.desc));
+
+                const rContainer = document.getElementById('realisations-container');
+                rContainer.innerHTML = '';
+                data.realisations.forEach(r => addRealisation(r));
+
+                const refContainer = document.getElementById('references-container');
+                refContainer.innerHTML = '';
+                data.references.forEach(ref => addReference(ref.name, ref.details));
+
+                if (data.colors) {
+                    document.getElementById('sidebar-bg').value = data.colors.sidebar || '#1a202c';
+                    document.getElementById('header-bg').value = data.colors.header || '#2d3748';
+                    document.getElementById('section-title-color').value = data.colors.title || '#a0c4ff';
+                    document.getElementById('font-family').value = data.colors.font || 'Inter';
+                }
+            } catch (e) { console.warn('Erreur chargement', e); }
+        }
+
+        function attachAutoSave() {
+            document.querySelectorAll('input, textarea, select').forEach(el => {
+                el.addEventListener('input', saveToLocalStorage);
+                el.addEventListener('change', saveToLocalStorage);
+            });
+        }
+
+        // --- AJOUTS ---
+        function addPersonalInfo(label = '', value = '') {
+            const container = document.getElementById('personal-info-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Nom du champ</label>
+                <input class="info-label-input" placeholder="Ex: Email" value="${label}">
+                <label class="mt-2">Valeur</label>
+                <input class="info-value-input" placeholder="Ex: jean@email.com" value="${value}">
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'personal')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addFormation(title = '', subtitle = '', date = '') {
+            const container = document.getElementById('formations-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Titre</label>
+                <input class="form-title" placeholder="Ex: Master en Data" value="${title}">
+                <label class="mt-2">Sous-titre</label>
+                <input class="form-subtitle" placeholder="Ex: Université de Lyon" value="${subtitle}">
+                <label class="mt-2">Date</label>
+                <input class="form-date" placeholder="Ex: 2021 - 2024" value="${date}">
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'formations')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addInterest(val = '') {
+            const container = document.getElementById('interests-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Intérêt</label>
+                <input class="interest-item" placeholder="Ex: Photographie, Musique" value="${val}">
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'interests')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addQuality(name = '', desc = '') {
+            const container = document.getElementById('qualities-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Qualité</label>
+                <input class="skill-name-input" placeholder="Ex: Autonomie" value="${name}">
+                <label class="mt-2">Description</label>
+                <textarea class="skill-desc-input" rows="2" placeholder="Ex: Capacité à travailler en autonomie...">${desc}</textarea>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'qualities')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addRealisation(val = '') {
+            const container = document.getElementById('realisations-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Réalisation</label>
+                <input class="real-item" placeholder="Ex: Création d'un site e-commerce" value="${val}">
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'realisations')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addReference(name = '', details = '') {
+            const container = document.getElementById('references-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Nom</label>
+                <input class="ref-name" placeholder="Ex: Pierre Durand" value="${name}">
+                <label class="mt-2">Détails</label>
+                <input class="ref-details" placeholder="Ex: Manager, +33 6 12 34 56 78" value="${details}">
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'references')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        // --- SUPPRESSION ---
+        function removeEntry(btn) {
+            btn.parentElement.remove();
+            saveToLocalStorage();
+        }
+
+        // --- RÉINITIALISATION ---
+        function resetForm() {
+            if (!confirm('Voulez-vous vraiment réinitialiser toutes les données ?')) return;
+            localStorage.removeItem('cvData');
+            document.getElementById('personal-info-container').innerHTML = '';
+            document.getElementById('formations-container').innerHTML = '';
+            document.getElementById('interests-container').innerHTML = '';
+            document.getElementById('qualities-container').innerHTML = '';
+            document.getElementById('realisations-container').innerHTML = '';
+            document.getElementById('references-container').innerHTML = '';
+            document.getElementById('profil').value = '';
+            document.getElementById('photo').value = '';
+            document.getElementById('sidebar-bg').value = '#1a202c';
+            document.getElementById('header-bg').value = '#2d3748';
+            document.getElementById('section-title-color').value = '#a0c4ff';
+            document.getElementById('font-family').value = 'Inter';
+
+            addPersonalInfo('Nom', 'Jean Dupont');
+            addFormation('Licence en Informatique', 'Université de Paris', '2020 - 2023');
+            addInterest('Lecture, Voyages, Sports');
+            addQuality('Autonomie', 'Capacité à travailler de manière indépendante et à prendre des initiatives.');
+            addRealisation('Application mobile: Développement d\'une app de gestion de tâches');
+            addReference('Marie Martin', 'Responsable RH, +33 7 89 01 23 45');
+            saveToLocalStorage();
+            alert('Formulaire réinitialisé avec des exemples.');
+        }
+
+        // --- APERÇU ---
+        function generatePreview() {
+            saveToLocalStorage();
+
+            const profil = document.getElementById('profil').value || 'Votre profil ici.';
+            const font = document.getElementById('font-family').value;
+            const sidebarBg = document.getElementById('sidebar-bg').value;
+            const headerBg = document.getElementById('header-bg').value;
+            const titleColor = document.getElementById('section-title-color').value;
+
+            // Photo
+            let photoHtml = '';
+            const photoFile = document.getElementById('photo').files[0];
+            if (photoFile) {
+                const src = URL.createObjectURL(photoFile);
+                photoHtml = `<img src="${src}" alt="Photo" />`;
+            } else {
+                photoHtml = `<div class="cv-photo-placeholder"><i class="fas fa-user"></i></div>`;
+            }
+
+            // Récupération des données
+            const personal = [];
+            document.querySelectorAll('#personal-info-container .entry').forEach(e => {
+                const label = e.querySelector('.info-label-input')?.value || '';
+                const value = e.querySelector('.info-value-input')?.value || '';
+                if (label || value) personal.push({ label, value });
+            });
+            const formations = [];
+            document.querySelectorAll('#formations-container .entry').forEach(e => {
+                const title = e.querySelector('.form-title')?.value || '';
+                const subtitle = e.querySelector('.form-subtitle')?.value || '';
+                const date = e.querySelector('.form-date')?.value || '';
+                if (title || subtitle || date) formations.push({ title, subtitle, date });
+            });
+            const interests = [];
+            document.querySelectorAll('#interests-container .entry').forEach(e => {
+                const val = e.querySelector('.interest-item')?.value || '';
+                if (val) interests.push(val);
+            });
+            const qualities = [];
+            document.querySelectorAll('#qualities-container .entry').forEach(e => {
+                const name = e.querySelector('.skill-name-input')?.value || '';
+                const desc = e.querySelector('.skill-desc-input')?.value || '';
+                if (name || desc) qualities.push({ name, desc });
+            });
+            const realisations = [];
+            document.querySelectorAll('#realisations-container .entry').forEach(e => {
+                const val = e.querySelector('.real-item')?.value || '';
+                if (val) realisations.push(val);
+            });
+            const references = [];
+            document.querySelectorAll('#references-container .entry').forEach(e => {
+                const name = e.querySelector('.ref-name')?.value || '';
+                const details = e.querySelector('.ref-details')?.value || '';
+                if (name || details) references.push({ name, details });
+            });
+
+            const name = personal.find(p => p.label.toLowerCase().includes('nom'))?.value || 'Votre Nom';
+
+            // Construction HTML
+            const personalHtml = personal.map(p =>
+                `<div class="cv-info-item"><i class="fas fa-${iconForLabel(p.label)}"></i><span><span class="cv-info-label">${p.label}:</span> ${p.value}</span></div>`
+            ).join('');
+
+            const formationsHtml = formations.map(f =>
+                `<div class="cv-block"><h4>${f.title}</h4><div class="cv-sub">${f.subtitle}</div><div class="cv-date">${f.date}</div></div>`
+            ).join('');
+
+            const interestsHtml = interests.map(i =>
+                `<div class="cv-interest-item">${i}</div>`
+            ).join('');
+
+            const qualitiesHtml = qualities.map(q =>
+                `<div class="cv-skill-item"><div class="cv-skill-name">${q.name}</div><div class="cv-skill-desc">${q.desc}</div></div>`
+            ).join('');
+
+            const realHtml = realisations.map(r =>
+                `<li>${r}</li>`
+            ).join('');
+
+            const refsHtml = references.map(r =>
+                `<div class="cv-ref-item"><div class="cv-ref-name">${r.name}</div><div class="cv-ref-details">${r.details}</div></div>`
+            ).join('');
+
+            const cvHtml = `
+                <style>
+                    .cv-wrapper { font-family: '${font}', sans-serif; }
+                    .cv-sidebar { background-color: ${sidebarBg}; }
+                    .cv-profile-header { background-color: ${headerBg}; }
+                    .cv-sidebar-section-title { color: ${titleColor}; }
+                    .cv-info-item i { color: ${titleColor}; }
+                    .cv-interest-item::before { color: ${titleColor}; }
+                    .cv-main-section-title { border-bottom-color: ${sidebarBg}; color: ${sidebarBg}; }
+                </style>
+                <div class="cv-wrapper">
+                    <div class="cv-container">
+                        <div class="cv-sidebar">
+                            <div class="cv-profile-header">
+                                <div class="cv-photo">${photoHtml}</div>
+                                <div class="cv-name">${name}</div>
+                                <div class="cv-subtitle">Curriculum Vitae</div>
+                            </div>
+                            <div class="cv-sidebar-content">
+                                <div class="cv-sidebar-section">
+                                    <div class="cv-sidebar-section-title">Informations</div>
+                                    ${personalHtml}
+                                </div>
+                                <div class="cv-sidebar-section">
+                                    <div class="cv-sidebar-section-title">Centres d'intérêt</div>
+                                    ${interestsHtml}
+                                </div>
+                                <div class="cv-sidebar-section">
+                                    <div class="cv-sidebar-section-title">Qualités</div>
+                                    ${qualitiesHtml}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cv-main">
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Profil</div>
+                                <div class="cv-text">${profil}</div>
+                            </div>
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Formation</div>
+                                ${formationsHtml}
+                            </div>
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Réalisations</div>
+                                <ul class="cv-real-list">${realHtml}</ul>
+                            </div>
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Références</div>
+                                ${refsHtml}
+                            </div>
+                            <div class="cv-disclaimer">Je certifie sur l'honneur que toutes les données personnelles sont utilisées dans le cadre du processus de recrutement.</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('cv-preview').innerHTML = cvHtml;
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('preview-mode').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function iconForLabel(label) {
+            const map = {
+                'nom': 'user',
+                'email': 'envelope',
+                'téléphone': 'phone',
+                'adresse': 'map-marker-alt',
+                'ville': 'city',
+                'site web': 'globe',
+                'linkedin': 'linkedin',
+                'github': 'github',
+                'nationalité': 'flag',
+            };
+            const key = label.toLowerCase();
+            for (const [k, v] of Object.entries(map)) {
+                if (key.includes(k)) return v;
+            }
+            return 'info-circle';
+        }
+
+        // --- RETOUR ÉDITION ---
+        function goBackToEdit() {
+            document.getElementById('preview-mode').style.display = 'none';
+            document.getElementById('editor').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- PDF ---
+        function downloadPDF() {
+            const element = document.getElementById('cv-preview');
+            const containers = element.getElementsByClassName('cv-container');
+            if (!containers.length) return;
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = 210;
+            const promises = [];
+
+            Array.from(containers).forEach((container, idx) => {
+                promises.push(
+                    html2canvas(container, { scale: 2, useCORS: true, logging: false }).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png');
+                        const imgHeight = (canvas.height * pageWidth) / canvas.width;
+                        if (idx > 0) pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, Math.min(imgHeight, 297));
+                    })
+                );
+            });
+
+            Promise.all(promises).then(() => {
+                pdf.save('mon_cv.pdf');
+            }).catch(err => {
+                alert('Erreur lors de la génération du PDF : ' + err);
+            });
+        }
+    </script>
+
+</body>
+</html>

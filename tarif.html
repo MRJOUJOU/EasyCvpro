@@ -1,0 +1,389 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarifs - EasyCV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfcff;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-pattern {
+            background-color: #fdfcff;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%237c3aed' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.4);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline:hover {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .pricing-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-card.popular {
+            border: 2px solid var(--primary);
+            box-shadow: 0 25px 50px -12px rgba(124, 58, 237, 0.15);
+            transform: scale(1.03);
+        }
+        
+        .pricing-card.popular::before {
+            content: "Populaire";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-bottom-left-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-list li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="antialiased text-gray-800">
+    <!-- Navigation -->
+    <nav class="navbar fixed w-full z-50 shadow-sm py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center text-white">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">EasyCV</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="font-medium hover:text-purple-600 transition-colors">Accueil</a>
+                    <a href="fonctionnalite.html" class="font-medium hover:text-purple-600 transition-colors">Fonctionnalités</a>
+                    <a href="model.html" class="font-medium hover:text-purple-600 transition-colors">Modèles</a>
+                    <a href="tarif.html" class="font-medium hover:text-purple-600 transition-colors">Tarifs</a>
+                    <a href="apropos.html" class="font-medium hover:text-purple-600 transition-colors">À propos</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="model.html#templates" class="btn-primary">Commencer gratuitement</a>
+                    
+                    <button class="md:hidden text-gray-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-pattern pt-32 pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6" data-aos="fade-up">
+                    Des <span class="gradient-text">tarifs simples</span> et transparents
+                </h1>
+                <p class="text-xl text-gray-600 mb-8" data-aos="fade-up" data-aos-delay="100">
+                    Choisissez l'offre qui correspond le mieux à vos besoins. Tous les plans incluent notre garantie satisfait ou remboursé de 14 jours.
+                </p>
+                <div class="flex justify-center" data-aos="fade-up" data-aos-delay="200">
+                    <div class="bg-white rounded-lg p-1 shadow-sm">
+                        <button class="px-4 py-2 rounded-md bg-purple-100 text-purple-700 font-medium">Mensuel</button>
+                        <button class="px-4 py-2 rounded-md text-gray-600 font-medium">Annuel (-30%)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Plan Gratuit -->
+                <div class="pricing-card bg-white p-8" data-aos="fade-up">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Gratuit</h3>
+                        <p class="text-gray-600 mb-4">Parfait pour essayer notre plateforme</p>
+                        <div class="price-amount">0€</div>
+                        <p class="text-gray-600">à vie</p>
+                    </div>
+                    
+                    <ul class="feature-list mb-8">
+                        <li>1 CV gratuit</li>
+                        <li>3 modèles de base</li>
+                        <li>Export PDF standard</li>
+                        <li>Accès aux conseils de base</li>
+                        <li class="text-gray-400 line-through">Modèles premium</li>
+                        <li class="text-gray-400 line-through">Analytiques avancées</li>
+                        <li class="text-gray-400 line-through">Support prioritaire</li>
+                    </ul>
+                    
+                    <a href="model.html#templates" class="btn-outline w-full text-center block">Commencer gratuitement</a>
+                </div>
+                
+                <!-- Plan Premium -->
+                <div class="pricing-card popular bg-white p-8" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Premium</h3>
+                        <p class="text-gray-600 mb-4">Idéal pour les chercheurs d'emploi sérieux</p>
+                        <div class="price-amount">7€</div>
+                        <p class="text-gray-600">par mois</p>
+                    </div>
+                    
+                    <ul class="feature-list mb-8">
+                        <li>CV illimités</li>
+                        <li>30+ modèles professionnels</li>
+                        <li>Export PDF haute qualité</li>
+                        <li>Conseils experts personnalisés</li>
+                        <li>Lettre de motivation incluse</li>
+                        <li>Analytiques de visualisation</li>
+                        <li>Support prioritaire par email</li>
+                    </ul>
+                    
+                    <a href="signup.html" class="btn-primary w-full text-center block">Choisir l'offre Premium</a>
+                </div>
+                
+                <!-- Plan Business -->
+                <div class="pricing-card bg-white p-8" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-2">Business</h3>
+                        <p class="text-gray-600 mb-4">Pour les recruteurs et entreprises</p>
+                        <div class="price-amount">19€</div>
+                        <p class="text-gray-600">par mois</p>
+                    </div>
+                    
+                    <ul class="feature-list mb-8">
+                        <li>Tout inclus dans Premium</li>
+                        <li>CV multilingues illimités</li>
+                        <li>Branding personnalisé</li>
+                        <li>Gestion d'équipe (5 utilisateurs)</li>
+                        <li>Export Word et PDF modifiable</li>
+                        <li>Analytiques avancées</li>
+                        <li>Support prioritaire 24/7</li>
+                    </ul>
+                    
+                    <a href="signup.html" class="btn-outline w-full text-center block">Choisir l'offre Business</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-6" data-aos="fade-up">Questions fréquentes</h2>
+                <p class="text-xl text-gray-600" data-aos="fade-up" data-aos-delay="100">
+                    Tout ce que vous devez savoir sur nos tarifs et services.
+                </p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm" data-aos="fade-up">
+                    <h3 class="text-xl font-semibold mb-2">Puis-je changer de plan à tout moment ?</h3>
+                    <p class="text-gray-600">Oui, vous pouvez passer à un plan supérieur à tout moment. Si vous passez à un plan inférieur, le changement s'appliquera à la fin de votre période de facturation en cours.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-sm" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-xl font-semibold mb-2">Y a-t-il des frais cachés ?</h3>
+                    <p class="text-gray-600">Absolument pas. Nos tarifs sont transparents et tous les frais sont indiqués clairement. Il n'y a pas de frais de setup ni de frais cachés.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-sm" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-xl font-semibold mb-2">Que se passe-t-il à la fin de ma période d'essai ?</h3>
+                    <p class="text-gray-600">À la fin de votre essai gratuit de 14 jours, vous pouvez choisir de souscrire à un de nos plans payants. Si vous ne souhaitez pas continuer, vous basculerez automatiquement sur le plan gratuit.</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-sm" data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-xl font-semibold mb-2">Quels modes de paiement acceptez-vous ?</h3>
+                    <p class="text-gray-600">Nous acceptons les cartes de crédit (Visa, MasterCard, American Express), PayPal et les virements bancaires pour les entreprises.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 gradient-bg text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6" data-aos="fade-up">Prêt à créer un CV exceptionnel ?</h2>
+            <p class="text-xl max-w-3xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="100">
+                Essayez gratuitement toutes nos fonctionnalités premium pendant 14 jours.
+            </p>
+            <a href="model.html#templates" class="bg-white text-purple-600 font-bold py-4 px-8 rounded-lg inline-block transition-all duration-300 hover:scale-105" data-aos="fade-up" data-aos-delay="200">
+                Commencer gratuitement
+            </a>
+            <p class="mt-4 text-purple-200" data-aos="fade-up" data-aos-delay="300">
+                Aucune carte de crédit requise • Essai de 14 jours
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <a href="#" class="flex items-center space-x-2 mb-6">
+                        <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center text-white">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <span class="text-xl font-bold">EasyCV</span>
+                    </a>
+                    <p class="text-gray-400 mb-6">
+                        La plateforme intuitive pour créer un CV professionnel qui vous distingue.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Produit</h3>
+                    <ul class="space-y-3">
+                        <li><a href="fonctionnalite.html" class="text-gray-400 hover:text-white transition-colors">Fonctionnalités</a></li>
+                        <li><a href="model.html" class="text-gray-400 hover:text-white transition-colors">Modèles</a></li>
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Entreprise</h3>
+                    <ul class="space-y-3">
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
+                      </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Légal</h3>
+                    <ul class="space-y-3">
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">Conditions d'utilisation</a></li>
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">Mentions légales</a></li>
+                       </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 EasyCV. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialisation AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out',
+            once: true
+        });
+    </script>
+</body>
+
+</html>

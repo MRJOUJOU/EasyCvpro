@@ -1,0 +1,1193 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Générateur de CV Modifiable</title>
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- html2canvas & jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+    </script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* --- Reset & Variables --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --radius: 16px;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f3f4f6;
+            padding: 20px;
+        }
+        /* --- Éditeur --- */
+        #editor {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        #editor h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        #editor h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+            margin-top: 28px;
+            margin-bottom: 16px;
+        }
+        #editor label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        #editor input,
+        #editor textarea,
+        #editor select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border 0.2s, box-shadow 0.2s;
+            background: #fafafa;
+        }
+        #editor input:focus,
+        #editor textarea:focus,
+        #editor select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+            background: #fff;
+        }
+        #editor textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+        /* Entrées dynamiques */
+        .entry {
+            border: 1px solid #e5e7eb;
+            padding: 16px;
+            margin-bottom: 14px;
+            border-radius: 12px;
+            background: #f9fafb;
+            position: relative;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .entry:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        .entry .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .entry .delete-btn:hover {
+            background: #dc2626;
+            transform: scale(1.05);
+        }
+        /* Boutons */
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--primary);
+            color: #fff;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
+        }
+        button:active {
+            transform: scale(0.96);
+        }
+        .btn-add {
+            background: #e5e7eb;
+            color: #1f2937;
+            margin-top: 4px;
+        }
+        .btn-add:hover {
+            background: #d1d5db;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+        /* Grille du formulaire */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px 48px;
+        }
+        @media (max-width: 820px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            #editor {
+                padding: 20px;
+            }
+        }
+        /* Aperçu */
+        #preview-mode {
+            max-width: 1280px;
+            margin: 30px auto 0;
+            background: #fff;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        #cv-preview {
+            background: #fff;
+            padding: 20px 0;
+        }
+        .preview-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        /* --- Styles du CV (intégrés dans l'aperçu) --- */
+        .cv-wrapper {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .cv-container {
+            display: flex;
+            min-height: 297mm;
+            font-family: 'Inter', sans-serif;
+        }
+        .cv-sidebar {
+            width: 35%;
+            color: #fff;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .cv-profile-header {
+            padding: 28px 20px 20px;
+            text-align: center;
+            background: #2c3e50;
+        }
+        .cv-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 14px;
+            border: 3px solid #fff;
+            overflow: hidden;
+            background: #1e2a3a;
+        }
+        .cv-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .cv-name {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .cv-title {
+            font-size: 12px;
+            opacity: 0.85;
+            font-style: italic;
+            margin-top: 2px;
+        }
+        .cv-sidebar-content {
+            padding: 24px 20px;
+            flex: 1;
+            background: #2c3e50;
+        }
+        .cv-sidebar-section {
+            margin-bottom: 26px;
+        }
+        .cv-sidebar-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+            color: #a0c4ff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: 6px;
+        }
+        .cv-info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        .cv-info-item i {
+            width: 16px;
+            color: #a0c4ff;
+            font-size: 13px;
+        }
+        .cv-info-label {
+            font-weight: 600;
+            margin-right: 3px;
+        }
+        .cv-skill-item {
+            margin-bottom: 14px;
+        }
+        .cv-skill-name {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .cv-skill-bars {
+            display: flex;
+            gap: 3px;
+        }
+        .cv-skill-bar {
+            width: 14px;
+            height: 4px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .cv-skill-bar.filled {
+            background: #a0c4ff;
+        }
+        .cv-lang-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            margin-bottom: 8px;
+        }
+        .cv-lang-dots {
+            display: flex;
+            gap: 3px;
+        }
+        .cv-lang-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .cv-lang-dot.filled {
+            background: #a0c4ff;
+        }
+        .cv-interests-list {
+            font-size: 11px;
+            line-height: 1.6;
+            list-style: none;
+            padding-left: 0;
+        }
+        .cv-interests-list li {
+            padding-left: 16px;
+            position: relative;
+            margin-bottom: 4px;
+        }
+        .cv-interests-list li::before {
+            content: "•";
+            color: #a0c4ff;
+            position: absolute;
+            left: 0;
+        }
+        .cv-main {
+            width: 65%;
+            padding: 30px 28px;
+            background: #fff;
+        }
+        .cv-main-section {
+            margin-bottom: 28px;
+        }
+        .cv-main-section-title {
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #1f2937;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 6px;
+            margin-bottom: 16px;
+            letter-spacing: 0.3px;
+        }
+        .cv-block {
+            margin-bottom: 18px;
+        }
+        .cv-block h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #111827;
+        }
+        .cv-block .cv-sub {
+            font-size: 11px;
+            font-style: italic;
+            color: #6b7280;
+        }
+        .cv-block .cv-date {
+            font-size: 11px;
+            font-weight: 600;
+            color: #2c3e50;
+            float: right;
+            margin-top: -18px;
+        }
+        .cv-block p,
+        .cv-block .cv-text {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #374151;
+            margin-top: 6px;
+        }
+        .cv-qualities-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 20px;
+            font-size: 12px;
+        }
+        .cv-quality-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+        .cv-quality-bullet {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #2c3e50;
+            margin-top: 7px;
+            flex-shrink: 0;
+        }
+        .cv-quality-text .cv-qlabel {
+            font-weight: 600;
+            color: #111827;
+        }
+        .cv-cert-item {
+            font-size: 12px;
+            margin-bottom: 8px;
+            padding-left: 16px;
+            position: relative;
+        }
+        .cv-cert-item::before {
+            content: "▶";
+            color: #2c3e50;
+            position: absolute;
+            left: 0;
+            font-size: 10px;
+        }
+        .cv-refs {
+            background: #f3f4f6;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+        .cv-ref-name {
+            font-weight: 700;
+            color: #111827;
+        }
+        .cv-ref-detail {
+            color: #4b5563;
+        }
+        .cv-disclaimer {
+            font-size: 9px;
+            text-align: center;
+            color: #9ca3af;
+            margin-top: 24px;
+            font-style: italic;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 16px;
+        }
+        /* Corrections pour les deux pages */
+        .cv-container+.cv-container {
+            margin-top: 30px;
+            page-break-before: always;
+        }
+        /* Responsive preview */
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+            #editor,
+            #preview-mode .preview-actions {
+                display: none !important;
+            }
+            #preview-mode {
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+                border-radius: 0;
+            }
+            .cv-wrapper {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            .cv-container {
+                min-height: auto;
+            }
+        }
+        @media (max-width: 640px) {
+            .cv-container {
+                flex-direction: column;
+            }
+            .cv-sidebar {
+                width: 100%;
+            }
+            .cv-main {
+                width: 100%;
+                padding: 20px;
+            }
+            .cv-qualities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== ÉDITEUR ===== -->
+<div id="editor">
+
+    <div class="mb-6">
+        <a href="model.html" class="btn-outline inline-flex items-center">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Retour aux modèles
+        </a>
+    </div>
+
+    <h1><i class="fas fa-pen-fancy text-purple-600 mr-2"></i> Créateur de CV</h1>
+
+        <!-- Boutons généraux -->
+        <div class="flex flex-wrap gap-3 mb-6">
+            <button class="btn-primary" onclick="resetForm()"><i class="fas fa-undo mr-1"></i> Réinitialiser</button>
+            <button class="btn-success" id="preview-btn" onclick="generatePreview()"><i class="fas fa-eye mr-1"></i> Aperçu</button>
+        </div>
+
+        <form onsubmit="return false;">
+            <div class="form-grid">
+
+                <!-- ===== COLONNE GAUCHE ===== -->
+                <div>
+
+                    <!-- Infos perso -->
+                    <h2><i class="fas fa-user text-purple-600 mr-2"></i> Informations personnelles</h2>
+                    <div id="personal-info-container"></div>
+                    <button type="button" class="btn-add" onclick="addPersonalInfo()"><i class="fas fa-plus mr-1"></i> Ajouter un champ</button>
+
+                    <!-- Photo -->
+                    <h2 class="mt-6"><i class="fas fa-camera text-purple-600 mr-2"></i> Photo de profil</h2>
+                    <input type="file" id="photo" accept="image/*" />
+
+                    <!-- Profil -->
+                    <h2 class="mt-6"><i class="fas fa-address-card text-purple-600 mr-2"></i> Profil</h2>
+                    <textarea id="profil" rows="4" placeholder="Décrivez votre profil en quelques lignes..."></textarea>
+
+                    <!-- Formations -->
+                    <h2 class="mt-6"><i class="fas fa-graduation-cap text-purple-600 mr-2"></i> Formations</h2>
+                    <div id="formations-container"></div>
+                    <button type="button" class="btn-add" onclick="addFormation()"><i class="fas fa-plus mr-1"></i> Ajouter une formation</button>
+
+                    <!-- Compétences -->
+                    <h2 class="mt-6"><i class="fas fa-code text-purple-600 mr-2"></i> Compétences</h2>
+                    <div id="skills-container"></div>
+                    <button type="button" class="btn-add" onclick="addSkill()"><i class="fas fa-plus mr-1"></i> Ajouter une compétence</button>
+
+                    <!-- Langues -->
+                    <h2 class="mt-6"><i class="fas fa-language text-purple-600 mr-2"></i> Langues</h2>
+                    <div id="languages-container"></div>
+                    <button type="button" class="btn-add" onclick="addLanguage()"><i class="fas fa-plus mr-1"></i> Ajouter une langue</button>
+
+                    <!-- Centres d'intérêt -->
+                    <h2 class="mt-6"><i class="fas fa-heart text-purple-600 mr-2"></i> Centres d'intérêt</h2>
+                    <div id="interests-container"></div>
+                    <button type="button" class="btn-add" onclick="addInterest()"><i class="fas fa-plus mr-1"></i> Ajouter un intérêt</button>
+
+                </div>
+
+                <!-- ===== COLONNE DROITE ===== -->
+                <div>
+
+                    <!-- Qualités -->
+                    <h2><i class="fas fa-star text-purple-600 mr-2"></i> Qualités</h2>
+                    <div id="qualities-container"></div>
+                    <button type="button" class="btn-add" onclick="addQuality()"><i class="fas fa-plus mr-1"></i> Ajouter une qualité</button>
+
+                    <!-- Certifications -->
+                    <h2 class="mt-6"><i class="fas fa-certificate text-purple-600 mr-2"></i> Certifications</h2>
+                    <div id="certifications-container"></div>
+                    <button type="button" class="btn-add" onclick="addCertification()"><i class="fas fa-plus mr-1"></i> Ajouter une certification</button>
+
+                    <!-- Réalisations -->
+                    <h2 class="mt-6"><i class="fas fa-trophy text-purple-600 mr-2"></i> Réalisations</h2>
+                    <div id="realisations-container"></div>
+                    <button type="button" class="btn-add" onclick="addRealisation()"><i class="fas fa-plus mr-1"></i> Ajouter une réalisation</button>
+
+                    <!-- Références -->
+                    <h2 class="mt-6"><i class="fas fa-address-book text-purple-600 mr-2"></i> Références</h2>
+                    <div id="references-container"></div>
+                    <button type="button" class="btn-add" onclick="addReference()"><i class="fas fa-plus mr-1"></i> Ajouter une référence</button>
+
+                    <!-- Personnalisation -->
+                    <h2 class="mt-6"><i class="fas fa-palette text-purple-600 mr-2"></i> Personnalisation</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label>Fond sidebar</label>
+                            <input type="color" id="sidebar-bg" value="#2c3e50" />
+                        </div>
+                        <div>
+                            <label>Fond entête</label>
+                            <input type="color" id="profile-header-bg" value="#1e2a3a" />
+                        </div>
+                        <div>
+                            <label>Couleur titres</label>
+                            <input type="color" id="section-title-color" value="#a0c4ff" />
+                        </div>
+                        <div>
+                            <label>Police</label>
+                            <select id="font-family">
+                                <option value="Inter">Inter</option>
+                                <option value="Poppins">Poppins</option>
+                                <option value="Roboto">Roboto</option>
+                                <option value="Open Sans">Open Sans</option>
+                                <option value="Lato">Lato</option>
+                                <option value="Montserrat">Montserrat</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- fin grid -->
+
+            </div>
+            <!-- fin form-grid -->
+
+            <div class="text-center mt-8">
+                <button class="btn-success text-lg px-8 py-3" onclick="generatePreview()">
+                    <i class="fas fa-eye mr-2"></i> Aperçu du CV
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- ===== APERÇU ===== -->
+    <div id="preview-mode" style="display: none;">
+        <div id="cv-preview"></div>
+        <div class="preview-actions">
+            <button class="btn-primary" onclick="downloadPDF()"><i class="fas fa-file-pdf mr-2"></i> Télécharger PDF</button>
+            <button class="btn-outline" onclick="goBackToEdit()"><i class="fas fa-edit mr-2"></i> Retour à l'édition</button>
+        </div>
+    </div>
+
+    <!-- ===== SCRIPT ===== -->
+    <script>
+        // --- Initialisation ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Créer une entrée par défaut pour chaque section
+            if (!document.querySelector('#personal-info-container .entry')) addPersonalInfo('Nom', 'Jean Dupont');
+            if (!document.querySelector('#formations-container .entry')) addFormation('Licence en Informatique', 'Université de Paris', 'sept. 2020 - juin 2023');
+            if (!document.querySelector('#skills-container .entry')) addSkill('Python', 4);
+            if (!document.querySelector('#languages-container .entry')) addLanguage('Français', 5);
+            if (!document.querySelector('#interests-container .entry')) addInterest('Lecture, Voyages');
+            if (!document.querySelector('#qualities-container .entry')) addQuality('Esprit d\'équipe', 'Travaille efficacement en groupe.');
+            if (!document.querySelector('#certifications-container .entry')) addCertification('Certification Web', 'Développement full-stack');
+            if (!document.querySelector('#realisations-container .entry')) addRealisation('Application mobile de gestion');
+            if (!document.querySelector('#references-container .entry')) addReference('Marie Martin', 'RH, +33 7 89 01 23 45');
+
+            // Charger depuis localStorage
+            loadFromLocalStorage();
+            // Écouteurs pour sauvegarde automatique
+            attachAutoSave();
+        });
+
+        // --- Sauvegarde / Chargement ---
+        function saveToLocalStorage() {
+            const data = {
+                personal: [],
+                profil: document.getElementById('profil').value,
+                formations: [],
+                skills: [],
+                languages: [],
+                interests: [],
+                qualities: [],
+                certifications: [],
+                realisations: [],
+                references: [],
+                colors: {
+                    sidebar: document.getElementById('sidebar-bg').value,
+                    header: document.getElementById('profile-header-bg').value,
+                    title: document.getElementById('section-title-color').value,
+                    font: document.getElementById('font-family').value,
+                }
+            };
+            // Personal
+            document.querySelectorAll('#personal-info-container .entry').forEach(e => {
+                const label = e.querySelector('.info-label-input')?.value || '';
+                const value = e.querySelector('.info-value-input')?.value || '';
+                if (label || value) data.personal.push({ label, value });
+            });
+            // Formations
+            document.querySelectorAll('#formations-container .entry').forEach(e => {
+                const title = e.querySelector('.form-title')?.value || '';
+                const subtitle = e.querySelector('.form-subtitle')?.value || '';
+                const date = e.querySelector('.form-date')?.value || '';
+                if (title || subtitle || date) data.formations.push({ title, subtitle, date });
+            });
+            // Skills
+            document.querySelectorAll('#skills-container .entry').forEach(e => {
+                const name = e.querySelector('.skill-name-input')?.value || '';
+                const level = parseInt(e.querySelector('.skill-level-input')?.value) || 1;
+                if (name) data.skills.push({ name, level });
+            });
+            // Languages
+            document.querySelectorAll('#languages-container .entry').forEach(e => {
+                const name = e.querySelector('.lang-name')?.value || '';
+                const level = parseInt(e.querySelector('.lang-level')?.value) || 1;
+                if (name) data.languages.push({ name, level });
+            });
+            // Interests
+            document.querySelectorAll('#interests-container .entry').forEach(e => {
+                const val = e.querySelector('.interest-item')?.value || '';
+                if (val) data.interests.push(val);
+            });
+            // Qualities
+            document.querySelectorAll('#qualities-container .entry').forEach(e => {
+                const title = e.querySelector('.quality-title-input')?.value || '';
+                const desc = e.querySelector('.quality-desc-input')?.value || '';
+                if (title || desc) data.qualities.push({ title, desc });
+            });
+            // Certifications
+            document.querySelectorAll('#certifications-container .entry').forEach(e => {
+                const name = e.querySelector('.cert-name')?.value || '';
+                const desc = e.querySelector('.cert-desc')?.value || '';
+                if (name || desc) data.certifications.push({ name, desc });
+            });
+            // Réalisations
+            document.querySelectorAll('#realisations-container .entry').forEach(e => {
+                const val = e.querySelector('.real-item')?.value || '';
+                if (val) data.realisations.push(val);
+            });
+            // Références
+            document.querySelectorAll('#references-container .entry').forEach(e => {
+                const name = e.querySelector('.ref-name')?.value || '';
+                const details = e.querySelector('.ref-details')?.value || '';
+                if (name || details) data.references.push({ name, details });
+            });
+
+            localStorage.setItem('cvData', JSON.stringify(data));
+        }
+
+        function loadFromLocalStorage() {
+            const raw = localStorage.getItem('cvData');
+            if (!raw) return;
+            try {
+                const data = JSON.parse(raw);
+                // Personal
+                const pContainer = document.getElementById('personal-info-container');
+                pContainer.innerHTML = '';
+                data.personal.forEach(p => addPersonalInfo(p.label, p.value));
+                // Profil
+                document.getElementById('profil').value = data.profil || '';
+                // Formations
+                const fContainer = document.getElementById('formations-container');
+                fContainer.innerHTML = '';
+                data.formations.forEach(f => addFormation(f.title, f.subtitle, f.date));
+                // Skills
+                const sContainer = document.getElementById('skills-container');
+                sContainer.innerHTML = '';
+                data.skills.forEach(s => addSkill(s.name, s.level));
+                // Languages
+                const lContainer = document.getElementById('languages-container');
+                lContainer.innerHTML = '';
+                data.languages.forEach(l => addLanguage(l.name, l.level));
+                // Interests
+                const iContainer = document.getElementById('interests-container');
+                iContainer.innerHTML = '';
+                data.interests.forEach(i => addInterest(i));
+                // Qualities
+                const qContainer = document.getElementById('qualities-container');
+                qContainer.innerHTML = '';
+                data.qualities.forEach(q => addQuality(q.title, q.desc));
+                // Certifications
+                const cContainer = document.getElementById('certifications-container');
+                cContainer.innerHTML = '';
+                data.certifications.forEach(c => addCertification(c.name, c.desc));
+                // Réalisations
+                const rContainer = document.getElementById('realisations-container');
+                rContainer.innerHTML = '';
+                data.realisations.forEach(r => addRealisation(r));
+                // Références
+                const refContainer = document.getElementById('references-container');
+                refContainer.innerHTML = '';
+                data.references.forEach(ref => addReference(ref.name, ref.details));
+                // Colors
+                if (data.colors) {
+                    document.getElementById('sidebar-bg').value = data.colors.sidebar || '#2c3e50';
+                    document.getElementById('profile-header-bg').value = data.colors.header || '#1e2a3a';
+                    document.getElementById('section-title-color').value = data.colors.title || '#a0c4ff';
+                    document.getElementById('font-family').value = data.colors.font || 'Inter';
+                }
+            } catch (e) { console.warn('Erreur chargement localStorage', e); }
+        }
+
+        function attachAutoSave() {
+            document.querySelectorAll('input, textarea, select').forEach(el => {
+                el.addEventListener('input', saveToLocalStorage);
+                el.addEventListener('change', saveToLocalStorage);
+            });
+        }
+
+        // --- Fonctions d'ajout ---
+        function addPersonalInfo(label = '', value = '') {
+            const container = document.getElementById('personal-info-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Nom du champ <input class="info-label-input" placeholder="Ex: Email" value="${label}"></label>
+                <label>Valeur <input class="info-value-input" placeholder="Ex: jean@email.com" value="${value}"></label>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'personal')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addFormation(title = '', subtitle = '', date = '') {
+            const container = document.getElementById('formations-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Titre <input class="form-title" placeholder="Ex: Master en Data" value="${title}"></label>
+                <label>Sous-titre <input class="form-subtitle" placeholder="Ex: Université de Lyon" value="${subtitle}"></label>
+                <label>Date <input class="form-date" placeholder="Ex: sept. 2021 - juin 2024" value="${date}"></label>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'formations')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addSkill(name = '', level = 3) {
+            const container = document.getElementById('skills-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Compétence <input class="skill-name-input" placeholder="Ex: JavaScript" value="${name}"></label>
+                <label>Niveau (1-5) <input type="number" class="skill-level-input" min="1" max="5" value="${level}"></label>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'skills')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addLanguage(name = '', level = 3) {
+            const container = document.getElementById('languages-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Langue <input class="lang-name" placeholder="Ex: Anglais" value="${name}"></label>
+                <label>Niveau (1-5) <input type="number" class="lang-level" min="1" max="5" value="${level}"></label>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'languages')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addInterest(val = '') {
+            const container = document.getElementById('interests-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Intérêt <input class="interest-item" placeholder="Ex: Photographie" value="${val}"></label>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'interests')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addQuality(title = '', desc = '') {
+            const container = document.getElementById('qualities-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Titre <input class="quality-title-input" placeholder="Ex: Autonomie" value="${title}"></label>
+                <label>Description <textarea class="quality-desc-input" rows="2" placeholder="Ex: Capacité à travailler en autonomie...">${desc}</textarea></label>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'qualities')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addCertification(name = '', desc = '') {
+            const container = document.getElementById('certifications-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Certification <input class="cert-name" placeholder="Ex: AWS Certified" value="${name}"></label>
+                <label>Description <input class="cert-desc" placeholder="Ex: Cloud Practitioner" value="${desc}"></label>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'certifications')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addRealisation(val = '') {
+            const container = document.getElementById('realisations-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Réalisation <input class="real-item" placeholder="Ex: Création d'un site e-commerce" value="${val}"></label>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'realisations')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        function addReference(name = '', details = '') {
+            const container = document.getElementById('references-container');
+            const entry = document.createElement('div');
+            entry.className = 'entry';
+            entry.innerHTML = `
+                <label>Nom <input class="ref-name" placeholder="Ex: Pierre Durand" value="${name}"></label>
+                <label>Détails <input class="ref-details" placeholder="Ex: Manager, +33 6 12 34 56 78" value="${details}"></label>
+                <button type="button" class="delete-btn" onclick="removeEntry(this, 'references')">Supprimer</button>
+            `;
+            container.appendChild(entry);
+            saveToLocalStorage();
+        }
+
+        // --- Suppression ---
+        function removeEntry(btn, section) {
+            btn.parentElement.remove();
+            saveToLocalStorage();
+        }
+
+        // --- Réinitialisation ---
+        function resetForm() {
+            if (!confirm('Voulez-vous vraiment réinitialiser toutes les données ?')) return;
+            localStorage.removeItem('cvData');
+            // Vider tous les conteneurs et recréer une entrée par défaut
+            document.getElementById('personal-info-container').innerHTML = '';
+            document.getElementById('formations-container').innerHTML = '';
+            document.getElementById('skills-container').innerHTML = '';
+            document.getElementById('languages-container').innerHTML = '';
+            document.getElementById('interests-container').innerHTML = '';
+            document.getElementById('qualities-container').innerHTML = '';
+            document.getElementById('certifications-container').innerHTML = '';
+            document.getElementById('realisations-container').innerHTML = '';
+            document.getElementById('references-container').innerHTML = '';
+            document.getElementById('profil').value = '';
+            document.getElementById('photo').value = '';
+            document.getElementById('sidebar-bg').value = '#2c3e50';
+            document.getElementById('profile-header-bg').value = '#1e2a3a';
+            document.getElementById('section-title-color').value = '#a0c4ff';
+            document.getElementById('font-family').value = 'Inter';
+            // Ajouter des exemples
+            addPersonalInfo('Nom', 'Jean Dupont');
+            addFormation('Licence en Informatique', 'Université de Paris', 'sept. 2020 - juin 2023');
+            addSkill('Python', 4);
+            addLanguage('Français', 5);
+            addInterest('Lecture, Voyages');
+            addQuality('Esprit d\'équipe', 'Travaille efficacement en groupe.');
+            addCertification('Certification Web', 'Développement full-stack');
+            addRealisation('Application mobile de gestion');
+            addReference('Marie Martin', 'RH, +33 7 89 01 23 45');
+            saveToLocalStorage();
+            alert('Formulaire réinitialisé avec des exemples.');
+        }
+
+        // --- Aperçu ---
+        function generatePreview() {
+            saveToLocalStorage();
+
+            const profil = document.getElementById('profil').value || 'Votre profil ici.';
+            const font = document.getElementById('font-family').value;
+            const sidebarBg = document.getElementById('sidebar-bg').value;
+            const headerBg = document.getElementById('profile-header-bg').value;
+            const titleColor = document.getElementById('section-title-color').value;
+
+            // Photo
+            let photoHtml = '';
+            const photoFile = document.getElementById('photo').files[0];
+            if (photoFile) {
+                const src = URL.createObjectURL(photoFile);
+                photoHtml = `<img src="${src}" alt="Photo" />`;
+            } else {
+                photoHtml = `<div style="width:100%;height:100%;background:${headerBg};"></div>`;
+            }
+
+            // Récupération des données
+            const personal = [];
+            document.querySelectorAll('#personal-info-container .entry').forEach(e => {
+                const label = e.querySelector('.info-label-input')?.value || '';
+                const value = e.querySelector('.info-value-input')?.value || '';
+                if (label || value) personal.push({ label, value });
+            });
+            const formations = [];
+            document.querySelectorAll('#formations-container .entry').forEach(e => {
+                const title = e.querySelector('.form-title')?.value || '';
+                const subtitle = e.querySelector('.form-subtitle')?.value || '';
+                const date = e.querySelector('.form-date')?.value || '';
+                if (title || subtitle || date) formations.push({ title, subtitle, date });
+            });
+            const skills = [];
+            document.querySelectorAll('#skills-container .entry').forEach(e => {
+                const name = e.querySelector('.skill-name-input')?.value || '';
+                const level = parseInt(e.querySelector('.skill-level-input')?.value) || 0;
+                if (name) skills.push({ name, level });
+            });
+            const languages = [];
+            document.querySelectorAll('#languages-container .entry').forEach(e => {
+                const name = e.querySelector('.lang-name')?.value || '';
+                const level = parseInt(e.querySelector('.lang-level')?.value) || 0;
+                if (name) languages.push({ name, level });
+            });
+            const interests = [];
+            document.querySelectorAll('#interests-container .entry').forEach(e => {
+                const val = e.querySelector('.interest-item')?.value || '';
+                if (val) interests.push(val);
+            });
+            const qualities = [];
+            document.querySelectorAll('#qualities-container .entry').forEach(e => {
+                const title = e.querySelector('.quality-title-input')?.value || '';
+                const desc = e.querySelector('.quality-desc-input')?.value || '';
+                if (title || desc) qualities.push({ title, desc });
+            });
+            const certifications = [];
+            document.querySelectorAll('#certifications-container .entry').forEach(e => {
+                const name = e.querySelector('.cert-name')?.value || '';
+                const desc = e.querySelector('.cert-desc')?.value || '';
+                if (name || desc) certifications.push({ name, desc });
+            });
+            const realisations = [];
+            document.querySelectorAll('#realisations-container .entry').forEach(e => {
+                const val = e.querySelector('.real-item')?.value || '';
+                if (val) realisations.push(val);
+            });
+            const references = [];
+            document.querySelectorAll('#references-container .entry').forEach(e => {
+                const name = e.querySelector('.ref-name')?.value || '';
+                const details = e.querySelector('.ref-details')?.value || '';
+                if (name || details) references.push({ name, details });
+            });
+
+            // Construction HTML du CV
+            const name = personal.find(p => p.label.toLowerCase().includes('nom'))?.value || 'Votre Nom';
+
+            // Génération des blocs
+            const personalHtml = personal.map(p =>
+                `<div class="cv-info-item"><i class="fas fa-${iconForLabel(p.label)}"></i><span><span class="cv-info-label">${p.label}:</span> ${p.value}</span></div>`
+            ).join('');
+
+            const formationsHtml = formations.map(f =>
+                `<div class="cv-block"><h4>${f.title}</h4><div class="cv-sub">${f.subtitle}</div><div class="cv-date">${f.date}</div></div>`
+            ).join('');
+
+            const skillsHtml = skills.map(s =>
+                `<div class="cv-skill-item"><div class="cv-skill-name">${s.name}</div><div class="cv-skill-bars">${[...Array(5)].map((_, i) => `<div class="cv-skill-bar${i < s.level ? ' filled' : ''}"></div>`).join('')}</div></div>`
+            ).join('');
+
+            const langsHtml = languages.map(l =>
+                `<div class="cv-lang-item"><span>${l.name}</span><div class="cv-lang-dots">${[...Array(5)].map((_, i) => `<div class="cv-lang-dot${i < l.level ? ' filled' : ''}"></div>`).join('')}</div></div>`
+            ).join('');
+
+            const interestsHtml = interests.map(i =>
+                `<li>${i}</li>`
+            ).join('');
+
+            const qualitiesHtml = qualities.map(q =>
+                `<div class="cv-quality-item"><div class="cv-quality-bullet"></div><div class="cv-quality-text"><span class="cv-qlabel">${q.title} :</span> ${q.desc}</div></div>`
+            ).join('');
+
+            const certsHtml = certifications.map(c =>
+                `<div class="cv-cert-item">${c.name}${c.desc ? ' — ' + c.desc : ''}</div>`
+            ).join('');
+
+            const realHtml = realisations.map(r =>
+                `<li>${r}</li>`
+            ).join('');
+
+            const refsHtml = references.map(r =>
+                `<div><div class="cv-ref-name">${r.name}</div><div class="cv-ref-detail">${r.details}</div></div>`
+            ).join('');
+
+            // Assemblage
+            const cvHtml = `
+                <style>
+                    .cv-wrapper { font-family: '${font}', sans-serif; }
+                    .cv-sidebar { background-color: ${sidebarBg}; }
+                    .cv-profile-header { background-color: ${headerBg}; }
+                    .cv-sidebar-section-title { color: ${titleColor}; }
+                    .cv-skill-bar.filled { background: ${titleColor}; }
+                    .cv-lang-dot.filled { background: ${titleColor}; }
+                    .cv-interests-list li::before { color: ${titleColor}; }
+                    .cv-main-section-title { border-bottom-color: ${sidebarBg}; color: ${sidebarBg}; }
+                </style>
+                <div class="cv-wrapper">
+                    <div class="cv-container">
+                        <div class="cv-sidebar">
+                            <div class="cv-profile-header">
+                                <div class="cv-photo">${photoHtml}</div>
+                                <div class="cv-name">${name}</div>
+                                <div class="cv-title">Curriculum Vitae</div>
+                            </div>
+                            <div class="cv-sidebar-content">
+                                <div class="cv-sidebar-section">
+                                    <div class="cv-sidebar-section-title">Informations</div>
+                                    ${personalHtml}
+                                </div>
+                                <div class="cv-sidebar-section">
+                                    <div class="cv-sidebar-section-title">Compétences</div>
+                                    ${skillsHtml}
+                                </div>
+                                <div class="cv-sidebar-section">
+                                    <div class="cv-sidebar-section-title">Langues</div>
+                                    ${langsHtml}
+                                </div>
+                                <div class="cv-sidebar-section">
+                                    <div class="cv-sidebar-section-title">Centres d'intérêt</div>
+                                    <ul class="cv-interests-list">${interestsHtml}</ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cv-main">
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Profil</div>
+                                <div class="cv-text">${profil}</div>
+                            </div>
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Formation</div>
+                                ${formationsHtml}
+                            </div>
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Qualités</div>
+                                <div class="cv-qualities-grid">${qualitiesHtml}</div>
+                            </div>
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Certifications</div>
+                                ${certsHtml}
+                            </div>
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Réalisations</div>
+                                <ul style="font-size:12px;line-height:1.6;padding-left:20px;">${realHtml}</ul>
+                            </div>
+                            <div class="cv-main-section">
+                                <div class="cv-main-section-title">Références</div>
+                                <div class="cv-refs">${refsHtml}</div>
+                            </div>
+                            <div class="cv-disclaimer">Je certifie que mes données personnelles sont utilisées dans le cadre du processus de recrutement.</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('cv-preview').innerHTML = cvHtml;
+            document.getElementById('editor').style.display = 'none';
+            document.getElementById('preview-mode').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function iconForLabel(label) {
+            const map = {
+                'nom': 'user',
+                'email': 'envelope',
+                'téléphone': 'phone',
+                'adresse': 'map-marker-alt',
+                'ville': 'city',
+                'site web': 'globe',
+                'linkedin': 'linkedin',
+                'github': 'github',
+            };
+            const key = label.toLowerCase();
+            for (const [k, v] of Object.entries(map)) {
+                if (key.includes(k)) return v;
+            }
+            return 'info-circle';
+        }
+
+        // --- Retour édition ---
+        function goBackToEdit() {
+            document.getElementById('preview-mode').style.display = 'none';
+            document.getElementById('editor').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- Téléchargement PDF ---
+        function downloadPDF() {
+            const element = document.getElementById('cv-preview');
+            const containers = element.getElementsByClassName('cv-container');
+            if (!containers.length) return;
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pageWidth = 210;
+            const promises = [];
+
+            Array.from(containers).forEach((container, idx) => {
+                promises.push(
+                    html2canvas(container, { scale: 2, useCORS: true, logging: false }).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png');
+                        const imgHeight = (canvas.height * pageWidth) / canvas.width;
+                        if (idx > 0) pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, Math.min(imgHeight, 297));
+                    })
+                );
+            });
+
+            Promise.all(promises).then(() => {
+                pdf.save('mon_cv.pdf');
+            }).catch(err => {
+                alert('Erreur lors de la génération du PDF : ' + err);
+            });
+        }
+    </script>
+
+</body>
+</html>

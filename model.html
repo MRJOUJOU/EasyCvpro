@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modèles - EasyCV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Existing styles unchanged */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --light: #f9fafb;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfcff;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-pattern {
+            background-color: #fdfcff;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%237c3aed' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.4);
+        }
+        
+        .template-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            background-color: #f3f4f6;
+            color: #4b5563;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        
+        .template-card {
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .template-img {
+            height: 250px;
+            background-color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+        }
+        
+        .template-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .template-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="antialiased text-gray-800">
+    <!-- Navigation (unchanged) -->
+    <nav class="navbar fixed w-full z-50 shadow-sm py-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center text-white">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">EasyCV</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="font-medium hover:text-purple-600 transition-colors">Accueil</a>
+                    <a href="fonctionnalite.html" class="font-medium hover:text-purple-600 transition-colors">Fonctionnalités</a>
+                    <a href="model.html" class="font-medium hover:text-purple-600 transition-colors">Modèles</a>
+                    <a href="apropos.html" class="font-medium hover:text-purple-600 transition-colors">À propos</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="model.html#templates" class="btn-primary">Commencer gratuitement</a>
+                    <button class="md:hidden text-gray-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (unchanged) -->
+    <section class="hero-pattern pt-32 pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6" data-aos="fade-up">
+                    Trouvez le <span class="gradient-text">modèle parfait</span> pour votre CV
+                </h1>
+                <p class="text-xl text-gray-600 mb-8" data-aos="fade-up" data-aos-delay="100">
+                    Parcourez notre collection de modèles professionnels conçus pour impressionner les recruteurs.
+                </p>
+                <div data-aos="fade-up" data-aos-delay="200">
+                    <a href="#templates" class="btn-primary mr-3">Voir tous les modèles</a>
+                    <a href="signup.html" class="btn-outline">Essayer gratuitement</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Templates Section (updated with images) -->
+    <section id="templates" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6" data-aos="fade-up">Modèles de CV professionnels</h2>
+                <p class="text-xl text-gray-600 mb-8" data-aos="fade-up" data-aos-delay="100">
+                    Choisissez parmi une variété de designs adaptés à tous les secteurs d'activité.
+                </p>
+                <div class="template-filter" data-aos="fade-up" data-aos-delay="200">
+                    <button class="filter-btn active">Tous</button>
+                    <button class="filter-btn">Moderne</button>
+                    <button class="filter-btn">Classique</button>
+                    <button class="filter-btn">Créatif</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Template 1: Moderne -->
+                <div class="template-card" data-aos="fade-up">
+                    <div class="relative">
+                        <div class="template-img">
+                            <img src="https://pic2.zhimg.com/v2-e34f1efe9b5aa05f15006a0a27f0c9c0_1440w.jpg?source=172ae18b" alt="Moderne Template">
+                        </div>
+                        <div class="template-badge">Populaire</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Moderne</h3>
+                        <p class="text-gray-600 mb-4">Design épuré et contemporain pour les professions créatives.</p>
+                        <a href="template5.html" class="text-purple-600 font-semibold flex items-center">
+                            Utiliser ce modèle <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Template 2: Classique -->
+                <div class="template-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="template-img">
+                        <img src=" https://assets.paperjam.lu/images/articles/votre-cv-a-la-loupe/0.5/0.5/600/400/235524.jpg" alt="Classique Template">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Classique</h3>
+                        <p class="text-gray-600 mb-4">Style traditionnel et professionnel pour les secteurs conservateurs.</p>
+                        <a href="template2.html" class="text-purple-600 font-semibold flex items-center">
+                            Utiliser ce modèle <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Template 3: Créatif -->
+                <div class="template-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="template-img">
+                        <img src=" https://img.freepik.com/premium-photo/candidate-handing-resume-cv-table-interviewer-entity_31965-169754.jpg?w=996" alt="Créatif Template">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Créatif</h3>
+                        <p class="text-gray-600 mb-4">Design épuré qui met l'accent sur le contenu et la clarté.</p>
+                        <a href="creatif.html" class="text-purple-600 font-semibold flex items-center">
+                            Utiliser ce modèle <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12" data-aos="fade-up">
+                <a href="#" class="btn-primary">Voir plus de modèles</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Template Customization (unchanged) -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right">
+                    <h2 class="text-3xl font-bold mb-6">Personnalisez votre modèle</h2>
+                    <p class="text-gray-600 mb-8">
+                        Tous nos modèles sont entièrement personnalisables pour s'adapter parfaitement à votre style et à votre secteur d'activité.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="mr-4">
+                                <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white">
+                                    <i class="fas fa-paint-brush"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Modification des couleurs</h3>
+                                <p class="text-gray-600">Changez la palette de couleurs pour correspondre à votre identité personnelle.</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="mr-4">
+                                <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white">
+                                    <i class="fas fa-font"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Choix de polices</h3>
+                                <p class="text-gray-600">Sélectionnez parmi une variété de typographies professionnelles.</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="mr-4">
+                                <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center text-white">
+                                    <i class="fas fa-th-large"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold mb-2">Disposition flexible</h3>
+                                <p class="text-gray-600">Réorganisez les sections selon vos préférences.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1589652717521-10c0d092dea9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Personnalisation de CV" class="rounded-2xl shadow-xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section (unchanged) -->
+    <section class="py-20 gradient-bg text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6" data-aos="fade-up">Trouvez le modèle idéal pour votre CV</h2>
+            <p class="text-xl max-w-3xl mx-auto mb-8" data-aos="fade-up" data-aos-delay="100">
+                Essayez gratuitement tous nos modèles pendant 14 jours.
+            </p>
+            <a href="model.html#templates" class="bg-white text-purple-600 font-bold py-4 px-8 rounded-lg inline-block transition-all duration-300 hover:scale-105" data-aos="fade-up" data-aos-delay="200">
+                Commencer gratuitement
+            </a>
+            <p class="mt-4 text-purple-200" data-aos="fade-up" data-aos-delay="300">
+                Aucune carte de crédit requise • Essai de 14 jours
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer (unchanged) -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <a href="#" class="flex items-center space-x-2 mb-6">
+                        <div class="w-10 h-10 rounded-lg gradient-bg flex items-center justify-center text-white">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <span class="text-xl font-bold"> EasyCV</span>
+                    </a>
+                    <p class="text-gray-400 mb-6">
+                        La plateforme intuitive pour créer un CV professionnel qui vous distingue.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Produit</h3>
+                    <ul class="space-y-3">
+                        <li><a href="fonctionnalite.html" class="text-gray-400 hover:text-white transition-colors">Fonctionnalités</a></li>
+                        <li><a href="model.html" class="text-gray-400 hover:text-white transition-colors">Modèles</a></li>
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Entreprise</h3>
+                    <ul class="space-y-3">
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Légal</h3>
+                    <ul class="space-y-3">
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">Conditions d'utilisation</a></li>
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">Mentions légales</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 EasyCV. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialisation AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out',
+            once: true
+        });
+
+        // Filtrage des modèles
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
