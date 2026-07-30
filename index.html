@@ -5,12 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EasyCV - Créez un CV qui vous représente vraiment</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
+
         :root {
             --primary: #7c3aed;
             --primary-dark: #6d28d9;
@@ -18,36 +19,36 @@
             --dark: #1f2937;
             --light: #f9fafb;
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #fdfcff;
         }
-        
+
         .gradient-bg {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
-        
+
         .gradient-text {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
+
         .hero-pattern {
             background-color: #fdfcff;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%237c3aed' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
-        
+
         .card-hover {
             transition: all 0.3s ease;
         }
-        
+
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
-        
+
         .feature-icon {
             width: 70px;
             height: 70px;
@@ -60,7 +61,7 @@
             font-size: 28px;
             margin-bottom: 1.5rem;
         }
-        
+
         .testimonial-card {
             background: linear-gradient(135deg, #ffffff 0%, #fdfcff 100%);
             border: 1px solid #e5e7eb;
@@ -68,7 +69,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .testimonial-card::before {
             content: "";
             position: absolute;
@@ -78,19 +79,19 @@
             height: 100%;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
-        
+
         .pricing-card {
             border: 1px solid #e5e7eb;
             border-radius: 16px;
             transition: all 0.3s ease;
         }
-        
+
         .pricing-card.popular {
             border: 2px solid var(--primary);
             box-shadow: 0 25px 50px -12px rgba(124, 58, 237, 0.15);
             transform: scale(1.03);
         }
-        
+
         .pricing-card.popular::before {
             content: "Populaire";
             position: absolute;
@@ -103,7 +104,7 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
@@ -111,13 +112,16 @@
             border-radius: 8px;
             font-weight: 600;
             transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.4);
+            color: white;
         }
-        
+
         .btn-outline {
             border: 2px solid var(--primary);
             color: var(--primary);
@@ -125,14 +129,16 @@
             border-radius: 8px;
             font-weight: 600;
             transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
         }
-        
+
         .btn-outline:hover {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             transform: translateY(-2px);
         }
-        
+
         .stat-card {
             background: white;
             border-radius: 16px;
@@ -140,37 +146,152 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
         }
-        
+
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        
+
         .navbar {
             backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
         }
-        
+
         .animated-bg {
             animation: gradientShift 8s ease infinite;
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
         }
-        
+
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
-        
+
         .floating {
             animation: float 6s ease-in-out infinite;
         }
-        
+
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* ===== BOUTON MENU MOBILE "BOUNCY BALL" ===== */
+        .menu-toggle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.08) rotate(-8deg);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.45);
+        }
+
+        .menu-toggle:active {
+            transform: scale(0.92);
+        }
+
+        .menu-toggle .icon {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle.open .icon {
+            transform: rotate(90deg);
+        }
+
+        /* Effet de vague au clic */
+        .menu-toggle::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 3px solid rgba(124, 58, 237, 0.3);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .menu-toggle:active::after {
+            opacity: 1;
+            transform: scale(1.4);
+            border-color: rgba(124, 58, 237, 0.1);
+        }
+
+        /* Animation de la petite bulle */
+        .menu-toggle .pulse-ring {
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid rgba(124, 58, 237, 0.15);
+            animation: pulseRing 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseRing {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        /* Menu mobile */
+        #mobile-menu {
+            transition: all 0.3s ease;
+        }
+
+        #mobile-menu.hidden {
+            display: none;
+        }
+
+        #mobile-menu a {
+            transition: all 0.2s ease;
+        }
+
+        #mobile-menu a:hover {
+            color: var(--primary);
+            padding-left: 8px;
+        }
+
+        footer a {
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: white !important;
         }
     </style>
 </head>
@@ -188,22 +309,36 @@
                         <span class="text-xl font-bold gradient-text">EasyCV</span>
                     </a>
                 </div>
-                
+
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="font-medium hover:text-purple-600 transition-colors">Accueil</a>
                     <a href="fonctionnalite.html" class="font-medium hover:text-purple-600 transition-colors">Fonctionnalités</a>
                     <a href="model.html" class="font-medium hover:text-purple-600 transition-colors">Modèles</a>
                     <a href="apropos.html" class="font-medium hover:text-purple-600 transition-colors">À propos</a>
                 </div>
-                
+
                 <div class="flex items-center space-x-4">
                     <a href="#" class="font-medium hover:text-purple-600 transition-colors hidden md:block">Connexion</a>
-                    <a href="model.html#templates" class="btn-primary">Commencer gratuitement</a>
-                    
-                    <button class="md:hidden text-gray-600">
-                        <i class="fas fa-bars text-xl"></i>
+                    <a href="model.html#templates" class="btn-primary hidden sm:inline-block">Commencer gratuitement</a>
+
+                    <!-- NOUVEAU BOUTON MENU "BOUNCY BALL" -->
+                    <button id="menuToggle" class="menu-toggle md:hidden" aria-label="Menu">
+                        <span class="pulse-ring"></span>
+                        <span class="icon">
+                            <i class="fas fa-bars"></i>
+                        </span>
                     </button>
                 </div>
+            </div>
+
+            <!-- Menu mobile -->
+            <div id="mobile-menu" class="hidden md:hidden pt-4 pb-2 border-t border-gray-100 mt-3">
+                <a href="index.html" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">Accueil</a>
+                <a href="fonctionnalite.html" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">Fonctionnalités</a>
+                <a href="model.html" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">Modèles</a>
+                <a href="apropos.html" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">À propos</a>
+                <a href="#" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">Connexion</a>
+                <a href="model.html#templates" class="block py-2.5 mt-2 btn-primary text-center">Commencer gratuitement</a>
             </div>
         </div>
     </nav>
@@ -228,14 +363,14 @@
                         <span>Vos données sont 100% sécurisées</span>
                     </div>
                 </div>
-                
+
                 <div class="md:w-1/2" data-aos="fade-left">
                     <div class="relative">
                         <div class="floating">
-                            <img src="https://images.unsplash.com/photo-1542435503-956c469947f6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" 
-                                 alt="CV Professionnel" class="rounded-2xl shadow-2xl">
+                            <img src="https://images.unsplash.com/photo-1542435503-956c469947f6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+                            alt="CV Professionnel" class="rounded-2xl shadow-2xl">
                         </div>
-                        
+
                         <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="300">
                             <div class="flex items-center">
                                 <div class="w-12 h-12 gradient-bg rounded-full flex items-center justify-center text-white mr-3">
@@ -247,7 +382,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="500">
                             <div class="flex items-center">
                                 <div class="w-12 h-12 gradient-bg rounded-full flex items-center justify-center text-white mr-3">
@@ -273,17 +408,17 @@
                     <div class="text-3xl font-bold gradient-text mb-2">98%</div>
                     <p class="text-gray-600">Satisfaction clients</p>
                 </div>
-                
+
                 <div class="stat-card text-center" data-aos="fade-up" data-aos-delay="100">
                     <div class="text-3xl font-bold gradient-text mb-2">45s</div>
                     <p class="text-gray-600">Pour créer un CV</p>
                 </div>
-                
+
                 <div class="stat-card text-center" data-aos="fade-up" data-aos-delay="200">
                     <div class="text-3xl font-bold gradient-text mb-2">24/7</div>
                     <p class="text-gray-600">Support disponible</p>
                 </div>
-                
+
                 <div class="stat-card text-center" data-aos="fade-up" data-aos-delay="300">
                     <div class="text-3xl font-bold gradient-text mb-2">30+</div>
                     <p class="text-gray-600">Modèles professionnels</p>
@@ -301,7 +436,7 @@
                     Découvrez comment EasyCV peut transformer votre recherche d'emploi
                 </p>
             </div>
-            
+
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="card-hover bg-white p-8 rounded-2xl" data-aos="fade-up">
                     <div class="feature-icon">
@@ -312,7 +447,7 @@
                         Interface conviviale qui vous guide pas à pas pour créer un CV professionnel en quelques minutes.
                     </p>
                 </div>
-                
+
                 <div class="card-hover bg-white p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="100">
                     <div class="feature-icon">
                         <i class="fas fa-palette"></i>
@@ -322,7 +457,7 @@
                         Choisissez parmi des dizaines de modèles modernes et adaptez-les à votre style personnel.
                     </p>
                 </div>
-                
+
                 <div class="card-hover bg-white p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="200">
                     <div class="feature-icon">
                         <i class="fas fa-robot"></i>
@@ -332,7 +467,7 @@
                         Nos CV sont conçus pour passer les filtres des systèmes de recrutement automatisés.
                     </p>
                 </div>
-                
+
                 <div class="card-hover bg-white p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="300">
                     <div class="feature-icon">
                         <i class="fas fa-file-export"></i>
@@ -342,7 +477,7 @@
                         Téléchargez votre CV en PDF, Word ou partagez-le via un lien unique en ligne.
                     </p>
                 </div>
-                
+
                 <div class="card-hover bg-white p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="400">
                     <div class="feature-icon">
                         <i class="fas fa-lightbulb"></i>
@@ -352,7 +487,7 @@
                         Recevez des suggestions personnalisées pour améliorer votre CV et maximiser son impact.
                     </p>
                 </div>
-                
+
                 <div class="card-hover bg-white p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="500">
                     <div class="feature-icon">
                         <i class="fas fa-mobile-alt"></i>
@@ -375,7 +510,7 @@
                     Créez un CV percutant en seulement 3 étapes simples
                 </p>
             </div>
-            
+
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="text-center" data-aos="fade-up">
                     <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
@@ -386,7 +521,7 @@
                         Créez votre compte en moins d'une minute avec votre email ou vos réseaux sociaux.
                     </p>
                 </div>
-                
+
                 <div class="text-center" data-aos="fade-up" data-aos-delay="200">
                     <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                         2
@@ -396,7 +531,7 @@
                         Choisissez un modèle et complétez vos informations avec nos guides intuitifs.
                     </p>
                 </div>
-                
+
                 <div class="text-center" data-aos="fade-up" data-aos-delay="400">
                     <div class="w-20 h-20 gradient-bg rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                         3
@@ -407,7 +542,7 @@
                     </p>
                 </div>
             </div>
-            
+
             <div class="text-center mt-12" data-aos="fade-up">
                 <a href="model.html#templates" class="btn-primary">Commencer maintenant</a>
             </div>
@@ -423,12 +558,12 @@
                     Découvrez les témoignages de nos utilisateurs satisfaits
                 </p>
             </div>
-            
+
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="testimonial-card p-6" data-aos="fade-up">
                     <div class="flex items-center mb-4">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80" 
-                             alt="Sophie Martin" class="w-12 h-12 rounded-full mr-4">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+                        alt="Sophie Martin" class="w-12 h-12 rounded-full mr-4">
                         <div>
                             <h4 class="font-bold">Sophie Martin</h4>
                             <p class="text-purple-600">Designer UX/UI</p>
@@ -445,11 +580,11 @@
                         <i class="fas fa-star"></i>
                     </div>
                 </div>
-                
+
                 <div class="testimonial-card p-6" data-aos="fade-up" data-aos-delay="200">
                     <div class="flex items-center mb-4">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80" 
-                             alt="Thomas Leroy" class="w-12 h-12 rounded-full mr-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+                        alt="Thomas Leroy" class="w-12 h-12 rounded-full mr-4">
                         <div>
                             <h4 class="font-bold">Thomas Leroy</h4>
                             <p class="text-purple-600">Développeur Full-Stack</p>
@@ -466,11 +601,11 @@
                         <i class="fas fa-star"></i>
                     </div>
                 </div>
-                
+
                 <div class="testimonial-card p-6" data-aos="fade-up" data-aos-delay="400">
                     <div class="flex items-center mb-4">
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80" 
-                             alt="Amélie Dubois" class="w-12 h-12 rounded-full mr-4">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
+                        alt="Amélie Dubois" class="w-12 h-12 rounded-full mr-4">
                         <div>
                             <h4 class="font-bold">Amélie Dubois</h4>
                             <p class="text-purple-600">Chef de Projet Marketing</p>
@@ -536,7 +671,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-semibold mb-6">Produit</h3>
                     <ul class="space-y-3">
@@ -545,14 +680,14 @@
                         <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-semibold mb-6">Entreprise</h3>
                     <ul class="space-y-3">
                         <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
-                      </ul>
+                    </ul>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-semibold mb-6">Légal</h3>
                     <ul class="space-y-3">
@@ -563,20 +698,50 @@
                     </ul>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
                 <p>&copy; 2023 EasyCV. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
+    </script>
     <script>
         // Initialisation AOS
         AOS.init({
             duration: 800,
             easing: 'ease-out',
             once: true
+        });
+
+        // Menu mobile avec animation "bouncy"
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const icon = menuToggle.querySelector('.icon i');
+
+        menuToggle.addEventListener('click', function() {
+            // Toggle la classe open pour l'animation du bouton
+            this.classList.toggle('open');
+
+            // Toggle le menu
+            mobileMenu.classList.toggle('hidden');
+
+            // Changer l'icône avec animation
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.className = 'fas fa-bars';
+            } else {
+                icon.className = 'fas fa-times';
+            }
+        });
+
+        // Fermer le menu en cliquant sur un lien
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuToggle.classList.remove('open');
+                icon.className = 'fas fa-bars';
+            });
         });
     </script>
 </body>

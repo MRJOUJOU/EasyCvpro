@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>À Propos -EasyCV</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>À Propos - EasyCV</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
+
         :root {
             --primary: #7c3aed;
             --primary-dark: #6d28d9;
@@ -18,41 +19,48 @@
             --dark: #1f2937;
             --light: #f9fafb;
         }
-        
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #fdfcff;
         }
-        
+
         .gradient-bg {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
-        
+
         .gradient-text {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
+
         .hero-pattern {
             background-color: #fdfcff;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%237c3aed' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
-        
+
         .card-hover {
             transition: all 0.3s ease;
         }
-        
+
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
-        
+
         .navbar {
             backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.92);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
@@ -60,13 +68,16 @@
             border-radius: 8px;
             font-weight: 600;
             transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.4);
+            color: white;
         }
-        
+
         .btn-outline {
             border: 2px solid var(--primary);
             color: var(--primary);
@@ -74,19 +85,21 @@
             border-radius: 8px;
             font-weight: 600;
             transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
         }
-        
+
         .btn-outline:hover {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             transform: translateY(-2px);
         }
-        
+
         .timeline {
             position: relative;
             padding-left: 3rem;
         }
-        
+
         .timeline::before {
             content: '';
             position: absolute;
@@ -96,12 +109,12 @@
             height: 100%;
             background: #e5e7eb;
         }
-        
+
         .timeline-item {
             position: relative;
             margin-bottom: 3rem;
         }
-        
+
         .timeline-item::before {
             content: '';
             position: absolute;
@@ -112,21 +125,123 @@
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         }
-        
+
         .team-member {
             transition: all 0.3s ease;
         }
-        
+
         .team-member:hover {
             transform: translateY(-5px);
         }
-        
+
         .team-img {
             transition: all 0.3s ease;
         }
-        
+
         .team-member:hover .team-img {
             transform: scale(1.05);
+        }
+
+        footer a {
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: white !important;
+        }
+
+        /* ===== BOUTON MENU MOBILE "BOUNCY BALL" ===== */
+        .menu-toggle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.08) rotate(-8deg);
+            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.45);
+        }
+
+        .menu-toggle:active {
+            transform: scale(0.92);
+        }
+
+        .menu-toggle .icon {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle.open .icon {
+            transform: rotate(90deg);
+        }
+
+        /* Effet de vague au clic */
+        .menu-toggle::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 3px solid rgba(124, 58, 237, 0.3);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .menu-toggle:active::after {
+            opacity: 1;
+            transform: scale(1.4);
+            border-color: rgba(124, 58, 237, 0.1);
+        }
+
+        /* Animation de la petite bulle */
+        .menu-toggle .pulse-ring {
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid rgba(124, 58, 237, 0.15);
+            animation: pulseRing 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseRing {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        /* Menu mobile */
+        #mobile-menu {
+            transition: all 0.3s ease;
+        }
+
+        #mobile-menu.hidden {
+            display: none;
+        }
+
+        #mobile-menu a {
+            transition: all 0.2s ease;
+        }
+
+        #mobile-menu a:hover {
+            color: var(--primary);
+            padding-left: 8px;
         }
     </style>
 </head>
@@ -144,22 +259,34 @@
                         <span class="text-xl font-bold gradient-text">EasyCV</span>
                     </a>
                 </div>
-                
-               <div class="hidden md:flex items-center space-x-8">
+
+                <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html" class="font-medium hover:text-purple-600 transition-colors">Accueil</a>
                     <a href="fonctionnalite.html" class="font-medium hover:text-purple-600 transition-colors">Fonctionnalités</a>
                     <a href="model.html" class="font-medium hover:text-purple-600 transition-colors">Modèles</a>
-                     <a href="apropos.html" class="font-medium hover:text-purple-600 transition-colors">À propos</a>
+                    <a href="apropos.html" class="font-medium text-purple-600 transition-colors">À propos</a>
                 </div>
-                
+
                 <div class="flex items-center space-x-4">
-                  
-                    <a href="model.html#templates" class="btn-primary">Commencer gratuitement</a>
-                    
-                    <button class="md:hidden text-gray-600">
-                        <i class="fas fa-bars text-xl"></i>
+                    <a href="model.html#templates" class="btn-primary hidden sm:inline-block">Commencer gratuitement</a>
+
+                    <!-- NOUVEAU BOUTON MENU "BOUNCY BALL" -->
+                    <button id="menuToggle" class="menu-toggle md:hidden" aria-label="Menu">
+                        <span class="pulse-ring"></span>
+                        <span class="icon">
+                            <i class="fas fa-bars"></i>
+                        </span>
                     </button>
                 </div>
+            </div>
+
+            <!-- Menu mobile -->
+            <div id="mobile-menu" class="hidden md:hidden pt-4 pb-2 border-t border-gray-100 mt-3">
+                <a href="index.html" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">Accueil</a>
+                <a href="fonctionnalite.html" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">Fonctionnalités</a>
+                <a href="model.html" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">Modèles</a>
+                <a href="apropos.html" class="block py-2.5 font-medium text-purple-600 transition-colors">À propos</a>
+                <a href="model.html#templates" class="block py-2.5 mt-2 btn-primary text-center">Commencer gratuitement</a>
             </div>
         </div>
     </nav>
@@ -198,10 +325,10 @@
                         De ce constat est née l'idée de EasyCV: une plateforme intuitive qui guide pas à pas les utilisateurs dans la création d'un CV professionnel, efficace et adapté aux attentes des recruteurs.
                     </p>
                 </div>
-                
+
                 <div data-aos="fade-left">
-                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80" 
-                         alt="Notre équipe" class="rounded-2xl shadow-xl">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80"
+                    alt="Notre équipe" class="rounded-2xl shadow-xl w-full">
                 </div>
             </div>
         </div>
@@ -216,32 +343,32 @@
                     Les étapes clés de notre développement
                 </p>
             </div>
-            
+
             <div class="timeline max-w-3xl mx-auto">
                 <div class="timeline-item" data-aos="fade-up">
                     <h3 class="text-xl font-bold mb-2">2018</h3>
                     <p class="text-purple-600 font-semibold mb-2">Lancement de l'idée</p>
                     <p class="text-gray-600">Conceptualisation du projet et développement du premier prototype fonctionnel.</p>
                 </div>
-                
+
                 <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
                     <h3 class="text-xl font-bold mb-2">2019</h3>
                     <p class="text-purple-600 font-semibold mb-2">Version bêta</p>
                     <p class="text-gray-600">Lancement de la version bêta avec 5 modèles de CV et tests utilisateurs.</p>
                 </div>
-                
+
                 <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
                     <h3 class="text-xl font-bold mb-2">2020</h3>
                     <p class="text-purple-600 font-semibold mb-2">Lancement officiel</p>
                     <p class="text-gray-600">Version officielle avec 15 modèles de CV et fonctionnalités d'export avancées.</p>
                 </div>
-                
+
                 <div class="timeline-item" data-aos="fade-up" data-aos-delay="300">
                     <h3 class="text-xl font-bold mb-2">2021</h3>
                     <p class="text-purple-600 font-semibold mb-2">100 000 utilisateurs</p>
                     <p class="text-gray-600">Franchissement du cap des 100 000 CV créés sur la plateforme.</p>
                 </div>
-                
+
                 <div class="timeline-item" data-aos="fade-up" data-aos-delay="400">
                     <h3 class="text-xl font-bold mb-2">2023</h3>
                     <p class="text-purple-600 font-semibold mb-2">Plus de 500 000 CV créés</p>
@@ -260,7 +387,7 @@
                     Chez EasyCV, nous croyons que chaque personne mérite de présenter le meilleur de son parcours professionnel.
                 </p>
             </div>
-            
+
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="bg-white p-8 rounded-2xl text-center card-hover" data-aos="fade-up">
                     <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-6">
@@ -269,7 +396,7 @@
                     <h3 class="text-xl font-bold mb-4">Notre objectif</h3>
                     <p class="text-gray-600">Démocratiser l'accès à des outils de création de CV professionnels, accessibles à tous quel que soit le secteur d'activité.</p>
                 </div>
-                
+
                 <div class="bg-white p-8 rounded-2xl text-center card-hover" data-aos="fade-up" data-aos-delay="200">
                     <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-6">
                         <i class="fas fa-eye"></i>
@@ -277,7 +404,7 @@
                     <h3 class="text-xl font-bold mb-4">Notre vision</h3>
                     <p class="text-gray-600">Devenir la référence incontournable pour toute personne souhaitant valoriser son parcours professionnel à travers un CV percutant.</p>
                 </div>
-                
+
                 <div class="bg-white p-8 rounded-2xl text-center card-hover" data-aos="fade-up" data-aos-delay="400">
                     <div class="w-16 h-16 gradient-bg rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-6">
                         <i class="fas fa-hand-holding-heart"></i>
@@ -298,42 +425,42 @@
                     Une équipe passionnée dédiée à votre réussite professionnelle
                 </p>
             </div>
-            
+
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="team-member text-center" data-aos="fade-up">
                     <div class="rounded-2xl overflow-hidden mb-6 team-img">
-                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80" 
-                             alt="Thomas Martin" class="w-full h-64 object-cover">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80"
+                        alt="Thomas Martin" class="w-full h-64 object-cover">
                     </div>
                     <h3 class="text-xl font-bold">Thomas Martin</h3>
                     <p class="text-purple-600 mb-2">Fondateur & CEO</p>
                     <p class="text-gray-600">Expert en recrutement avec 10 ans d'expérience</p>
                 </div>
-                
+
                 <div class="team-member text-center" data-aos="fade-up" data-aos-delay="100">
                     <div class="rounded-2xl overflow-hidden mb-6 team-img">
-                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80" 
-                             alt="Sophie Leroux" class="w-full h-64 object-cover">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80"
+                        alt="Sophie Leroux" class="w-full h-64 object-cover">
                     </div>
                     <h3 class="text-xl font-bold">Sophie Leroux</h3>
                     <p class="text-purple-600 mb-2">Directrice Design</p>
                     <p class="text-gray-600">Spécialiste en expérience utilisateur et design d'interface</p>
                 </div>
-                
+
                 <div class="team-member text-center" data-aos="fade-up" data-aos-delay="200">
                     <div class="rounded-2xl overflow-hidden mb-6 team-img">
-                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80" 
-                             alt="Marc Dubois" class="w-full h-64 object-cover">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80"
+                        alt="Marc Dubois" class="w-full h-64 object-cover">
                     </div>
                     <h3 class="text-xl font-bold">Marc Dubois</h3>
                     <p class="text-purple-600 mb-2">Lead Développeur</p>
                     <p class="text-gray-600">Expert en développement web et architectures complexes</p>
                 </div>
-                
+
                 <div class="team-member text-center" data-aos="fade-up" data-aos-delay="300">
                     <div class="rounded-2xl overflow-hidden mb-6 team-img">
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80" 
-                             alt="Émilie Petit" class="w-full h-64 object-cover">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=80"
+                        alt="Émilie Petit" class="w-full h-64 object-cover">
                     </div>
                     <h3 class="text-xl font-bold">Émilie Petit</h3>
                     <p class="text-purple-600 mb-2">Responsable RH</p>
@@ -359,7 +486,7 @@
         </div>
     </section>
 
-     <!-- Footer -->
+    <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8">
@@ -388,7 +515,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-semibold mb-6">Produit</h3>
                     <ul class="space-y-3">
@@ -397,37 +524,67 @@
                         <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
                     </ul>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-semibold mb-6">Entreprise</h3>
                     <ul class="space-y-3">
                         <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">À propos</a></li>
-                      </ul>
+                    </ul>
                 </div>
-                
+
                 <div>
                     <h3 class="text-lg font-semibold mb-6">Légal</h3>
                     <ul class="space-y-3">
                         <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">Conditions d'utilisation</a></li>
                         <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">Politique de confidentialité</a></li>
                         <li><a href="apropos.html" class="text-gray-400 hover:text-white transition-colors">Mentions légales</a></li>
-                       </ul>
+                    </ul>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-                <p>&copy; 2023 EasyCV. Tous droits réservés.</p>
+                <p>&copy; 2024 EasyCV. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
+    </script>
     <script>
         // Initialisation AOS
         AOS.init({
             duration: 800,
             easing: 'ease-out',
             once: true
+        });
+
+        // Menu mobile avec animation "bouncy"
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const icon = menuToggle.querySelector('.icon i');
+
+        menuToggle.addEventListener('click', function() {
+            // Toggle la classe open pour l'animation du bouton
+            this.classList.toggle('open');
+
+            // Toggle le menu
+            mobileMenu.classList.toggle('hidden');
+
+            // Changer l'icône avec animation
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.className = 'fas fa-bars';
+            } else {
+                icon.className = 'fas fa-times';
+            }
+        });
+
+        // Fermer le menu en cliquant sur un lien
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuToggle.classList.remove('open');
+                icon.className = 'fas fa-bars';
+            });
         });
     </script>
 </body>
