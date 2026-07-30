@@ -220,7 +220,6 @@
             transform: rotate(90deg);
         }
 
-        /* Effet de vague au clic */
         .menu-toggle::after {
             content: '';
             position: absolute;
@@ -237,7 +236,6 @@
             border-color: rgba(124, 58, 237, 0.1);
         }
 
-        /* Animation de la petite bulle */
         .menu-toggle .pulse-ring {
             position: absolute;
             inset: -6px;
@@ -257,7 +255,6 @@
             }
         }
 
-        /* Menu mobile */
         #mobile-menu {
             transition: all 0.3s ease;
         }
@@ -311,8 +308,6 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="model.html#templates" class="btn-primary hidden sm:inline-block">Commencer gratuitement</a>
-
-                    <!-- NOUVEAU BOUTON MENU "BOUNCY BALL" -->
                     <button id="menuToggle" class="menu-toggle md:hidden" aria-label="Menu">
                         <span class="pulse-ring"></span>
                         <span class="icon">
@@ -321,8 +316,6 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Menu mobile -->
             <div id="mobile-menu" class="hidden md:hidden pt-4 pb-2 border-t border-gray-100 mt-3">
                 <a href="index.html" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">Accueil</a>
                 <a href="fonctionnalite.html" class="block py-2.5 font-medium hover:text-purple-600 transition-colors">Fonctionnalités</a>
@@ -351,7 +344,7 @@
         </div>
     </section>
 
-    <!-- Templates Section -->
+    <!-- Templates Section avec TES liens d'origine -->
     <section id="templates" class="py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-12">
@@ -368,48 +361,45 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="templates-grid">
-                <!-- Template 1: Moderne -->
+                <!-- Template 1: Moderne - LIEN ORIGINAL -->
                 <div class="template-card" data-category="moderne" data-aos="fade-up">
                     <div class="relative">
                         <div class="template-img">
-                            <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop&crop=center"
-                            alt="Moderne Template">
+                            <img src="https://pic2.zhimg.com/v2-e34f1efe9b5aa05f15006a0a27f0c9c0_1440w.jpg?source=172ae18b" alt="Moderne Template">
                         </div>
                         <div class="template-badge">Populaire</div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold mb-2">Moderne</h3>
-                        <p class="text-gray-600 mb-4">Design épuré et contemporain pour les professions créatives et tech.</p>
+                        <p class="text-gray-600 mb-4">Design épuré et contemporain pour les professions créatives.</p>
                         <a href="template5.html" class="text-purple-600 font-semibold flex items-center hover:gap-2 transition-all">
                             Utiliser ce modèle <i class="fas fa-arrow-right ml-2"></i>
                         </a>
                     </div>
                 </div>
 
-                <!-- Template 2: Classique -->
+                <!-- Template 2: Classique - LIEN ORIGINAL -->
                 <div class="template-card" data-category="classique" data-aos="fade-up" data-aos-delay="100">
                     <div class="template-img">
-                        <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop&crop=center&sat=-50"
-                        alt="Classique Template">
+                        <img src="https://assets.paperjam.lu/images/articles/votre-cv-a-la-loupe/0.5/0.5/600/400/235524.jpg" alt="Classique Template">
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold mb-2">Classique</h3>
-                        <p class="text-gray-600 mb-4">Style traditionnel pour les secteurs conservateurs et juridiques.</p>
+                        <p class="text-gray-600 mb-4">Style traditionnel et professionnel pour les secteurs conservateurs.</p>
                         <a href="template2.html" class="text-purple-600 font-semibold flex items-center hover:gap-2 transition-all">
                             Utiliser ce modèle <i class="fas fa-arrow-right ml-2"></i>
                         </a>
                     </div>
                 </div>
 
-                <!-- Template 3: Créatif -->
+                <!-- Template 3: Créatif - LIEN ORIGINAL -->
                 <div class="template-card" data-category="creatif" data-aos="fade-up" data-aos-delay="200">
                     <div class="template-img">
-                        <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop&crop=center&sat=30&hue=280"
-                        alt="Créatif Template">
+                        <img src="https://img.freepik.com/premium-photo/candidate-handing-resume-cv-table-interviewer-entity_31965-169754.jpg?w=996" alt="Créatif Template">
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold mb-2">Créatif</h3>
-                        <p class="text-gray-600 mb-4">Design original pour les métiers artistiques et la communication.</p>
+                        <p class="text-gray-600 mb-4">Design épuré qui met l'accent sur le contenu et la clarté.</p>
                         <a href="creatif.html" class="text-purple-600 font-semibold flex items-center hover:gap-2 transition-all">
                             Utiliser ce modèle <i class="fas fa-arrow-right ml-2"></i>
                         </a>
@@ -492,7 +482,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
+     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid md:grid-cols-4 gap-8">
@@ -568,6 +558,7 @@
     </div>
 </footer>
 
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
     </script>
     <script>
@@ -578,7 +569,7 @@
             once: true
         });
 
-        // Menu mobile avec animation "bouncy"
+        // Menu mobile
         const menuToggle = document.getElementById('menuToggle');
         const mobileMenu = document.getElementById('mobile-menu');
         const icon = menuToggle.querySelector('.icon i');
